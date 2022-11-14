@@ -141,11 +141,7 @@ const Register = () => {
                           id="fix"
                           ref={contactRef}
                           type="number"
-<<<<<<< HEAD
                           className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 pl-12 lg:ml-2"
-=======
-                          className="w-full my-2 rounded-md border border-slate-300 px-4 py-3 pl-12 lg:ml-2"
->>>>>>> c85b5f9143204befa8b0ea8b819ebe0c7e0e38d5
                           placeholder="Contact Number"
                         />
                       </div>
