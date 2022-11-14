@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: 'Sora', sans-serif;
+}
+.gridColumn-1 {
+  grid-column: 1;
+}
+.gridColumn-2 {
+  grid-column: 2;
+}
+.gridColumn-3 {
+  grid-column: 3;
+}
+.gridColumn-4 {
+  grid-column: 4;
+}
+.gridColumn-5 {
+  grid-column: 5;
+}
+.gridColumn-6 {
+  grid-column: 6;
+}
+.gridColumn-7 {
+  grid-column: 7;
+}
+
+/* Chrome, Safari, Edge, Opera */
+#fix::-webkit-outer-spin-button,
+#fix::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+#fix {
+  -moz-appearance: textfield;
+}
