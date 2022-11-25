@@ -41,7 +41,7 @@ const PaymentLayout = ({
           <span className="absolute left-4">+63</span>
           <input
             id="fix"
-            ref={contactRef}
+            ref={gcashNumber}
             type="number"
             className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 pl-12 lg:ml-2"
             placeholder="Phone Number"
