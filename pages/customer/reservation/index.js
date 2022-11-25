@@ -43,7 +43,7 @@ const History = () => {
           {isLoading ? (
             <Loading />
           ) : (
-            <div className="flex flex-col gap-4 p-4 lg:flex-row">
+            <div className="flex flex-col justify-center gap-4 p-4  lg:flex-row">
               <>
                 {reservationList?.length == 0 ? (
                   <div className="w-full p-4">
@@ -65,20 +65,21 @@ const History = () => {
                           roomType,
                           total,
                           preferredRoom,
+                          requestComment,
                         },
                         index
                       ) => (
                         <div
                           key={index}
-                          className="flex flex-col md:flex-row md:items-center md:gap-4"
+                          className="flex flex-col md:gap-4 lg:flex-row lg:items-center"
                         >
-                          <div className="flex items-center justify-center">
+                          <div className="flex w-screen max-w-md items-center justify-center">
                             <Image
                               height={250}
                               width={400}
                               src={image || '/thumbnail.png'}
                               alt={roomType}
-                              className="aspect-video w-full rounded-lg object-cover drop-shadow-md sm:w-72"
+                              className="aspect-video rounded-lg object-cover drop-shadow-md sm:w-72"
                             />
                           </div>
                           <div className="py-4 md:p-4">
@@ -180,6 +181,11 @@ const History = () => {
                                 </button>
                               )}
                             </div>
+                            {status == 'declined' && requestComment && (
+                              <p className="w-full max-w-md border-2 border-dashed border-rose-500 bg-rose-100 p-2 px-4">
+                                {requestComment}
+                              </p>
+                            )}
                           </div>
                         </div>
                       )

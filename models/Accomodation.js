@@ -30,6 +30,10 @@ const AccomodationSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Please fill up this field'],
   },
+  maxBed: {
+    type: Number,
+    required: [true, 'Please fill up this field'],
+  },
   maxChildren: {
     type: Number,
     required: [true, 'Please fill up this field'],

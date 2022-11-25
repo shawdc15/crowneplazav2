@@ -67,11 +67,16 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
     setIsLoading(false)
   }
   const declineHandler = async () => {
+    const backUpMessage =
+      'Your request for booking is declined due to unreasonable agenda. We are sorry for the inconvenience and we hope you’ll understand.'
+    console.log(reasonref.current?.value || backUpMessage)
+
     setIsLoading(true)
-    const res = await updateStatus(id, { status: 'declined' })
+    const res = await updateStatus(id, {
+      status: 'declined',
+      requestComment: reasonref.current?.value || backUpMessage,
+    })
     if (res.success) {
-      const backUpMessage =
-        'Your request for booking is declined due to unreasonable agenda. We are sorry for the inconvenience and we hope you’ll understand.'
       const reservationData = data.filter((item) => item._id == id)
       if (reservationData[0]?.email?.length > 0) {
         const emailData = {
@@ -81,6 +86,7 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
           name: reservationData[0]?.name,
         }
         await declinedReceipt(emailData)
+        // await updateStatus(id, {})
       }
       const newData = data.filter((item) => item._id != id)
       setData(newData)
@@ -91,8 +97,6 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
   // cancellation of payment
   const cancelledHandler = async (status) => {
     setIsLoading(true)
-    console.log(status)
-    let reason = reasonref.current?.value
     const res = await updateStatus(id, { status })
     let backUpMessage = ''
     if (res.success) {
@@ -120,6 +124,14 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
 
         console.log(emailData)
         await declinedReceipt(emailData)
+        await updateStatus(id, {
+          cancelComment:
+            status == 'approve_cancellation'
+              ? backUpMessage
+              : reason.length > 0
+              ? reason
+              : backUpMessage,
+        })
       }
       const newData = data.filter((item) => item._id != id)
       setData(newData)
@@ -157,7 +169,7 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
                 remarks,
                 contact,
                 status,
-                purposeOfStay,
+                // purposeOfStay,
               },
               index
             ) => (
@@ -184,7 +196,7 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
                     <div className="p-2 text-slate-600">
                       <p>No of extra beds: {noOfExtraBed}</p>
                       {/* <p>Voucher: {voucherCode}</p> */}
-                      <p>Purpose of Stay: {purposeOfStay}</p>
+                      {/* <p>Purpose of Stay: {purposeOfStay}</p> */}
                       <p>Remarks: {remarks}</p>
                       {receipt && <p>Reason: {receiptHandler(_id)}</p>}
                     </div>
@@ -268,7 +280,7 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
                         ) : (
                           status == 'request cancellation' && (
                             <>
-                              <button
+                              {/* <button
                                 onClick={() =>
                                   cancelledHandler(
                                     'declined cancel reservation'
@@ -277,14 +289,14 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
                                 className="rounded-md bg-slate-500 px-4 py-2 text-white"
                               >
                                 Decline
-                              </button>
+                              </button> */}
                               <button
                                 onClick={() =>
                                   cancelledHandler('approve_cancellation')
                                 }
                                 className="rounded-md bg-emerald-500 px-4 py-2 text-white"
                               >
-                                Approve
+                                Returned
                               </button>
                             </>
                           )

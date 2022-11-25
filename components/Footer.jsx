@@ -95,7 +95,7 @@ const Footer = () => {
       <div className="my-10 flex flex-col p-4 md:m-0">
         <p className="mb-5 text-3xl font-bold text-white">Get in touch</p>
         <a
-          href="mailto:jirohotel@gmail.com"
+          href="mailto:crowneplaza.hotel.ph@gmail.com"
           rel="noopener noreferrer"
           target="_blank"
           className="bg-emerald-500 py-4 px-6 text-center text-lg text-white transition-transform duration-300 hover:-translate-y-1"

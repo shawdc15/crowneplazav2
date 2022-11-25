@@ -26,6 +26,7 @@ const RoomModal = ({ setModal, mode }) => {
   const roomNoRef = useRef()
   const maxAdultRef = useRef()
   const maxChildrenRef = useRef()
+  const maxBedRef = useRef()
 
   // const floorRef = useRef()
   const roomStatusRef = useRef()
@@ -54,6 +55,7 @@ const RoomModal = ({ setModal, mode }) => {
       roomStatus: roomStatusRef.current?.value,
       maxAdult: maxAdultRef.current?.value,
       maxChildren: maxChildrenRef.current?.value,
+      maxBed: maxBedRef.current?.value,
       note: noteRef.current?.value,
       image: imageUrlRef?.current || state.adminModalData?.image,
     }
@@ -125,6 +127,12 @@ const RoomModal = ({ setModal, mode }) => {
       tempError = {
         ...tempError,
         maxChildrenError: 'Max children must be higher or equal to 0',
+      }
+    }
+    if (maxBedRef.current.value < 0) {
+      tempError = {
+        ...tempError,
+        maxBedError: 'Max bed must be higher or equal to 0',
       }
     }
     if (roomStatusRef.current.value.trim().length < 1) {
@@ -223,6 +231,14 @@ const RoomModal = ({ setModal, mode }) => {
               placeholder="Max Children"
               defaultValue={state.adminModalData?.maxChildren || 0}
             />
+            <label className="mt-2 text-slate-600">Max Bed</label>
+            <input
+              type="number"
+              ref={maxBedRef}
+              className=" my-2 rounded-md border border-slate-300 px-4 py-3"
+              placeholder="Max Bed"
+              defaultValue={state.adminModalData?.maxBedRef || 0}
+            />
 
             <span className="text-rose-500">{error?.roomNoError}</span>
             <label className="mt-2 text-slate-600">Room No</label>
@@ -239,16 +255,6 @@ const RoomModal = ({ setModal, mode }) => {
             />
           </div>
           <div className="flex flex-col">
-            {/* <span className="text-rose-500">{error?.floorError}</span>
-            <label className="mt-2 text-slate-600">Floor</label>
-            <input
-              type="number"
-              ref={floorRef}
-              className=" my-2 rounded-md border border-slate-300 px-4 py-3"
-              placeholder="Floor"
-              defaultValue={state.adminModalData?.floor}
-            /> */}
-
             <span className="text-rose-500">{error?.roomStatus}</span>
             <label className="mt-2 text-slate-600">Status</label>
             <select

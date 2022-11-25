@@ -24,7 +24,9 @@ import { v4 } from 'uuid'
 import { storage } from '../../services/firebase'
 
 const BookCard = ({ id, children, role }) => {
+  const [dataPolicy, setDataPolicy] = useState(false)
   const [adultError, setAdultError] = useState(false)
+  const [bedError, setBedError] = useState(false)
   const [childrenError, setChildrenError] = useState(false)
   const [data, setData] = useState()
   const { state, dispatch } = useAppContext()
@@ -46,7 +48,9 @@ const BookCard = ({ id, children, role }) => {
             ...arrayOfVaccinationRef.current,
             url,
           ]
-          finalHandler()
+          if (arrayOfVaccination.length == i + 1) {
+            finalHandler()
+          }
         })
       })
     }
@@ -65,7 +69,7 @@ const BookCard = ({ id, children, role }) => {
       noOfAdult: noAdult,
       noOfChildren: noChildren,
       noOfExtraBed: extraBeds,
-      purposeOfStay: purposeOfStayRef.current?.value,
+      // purposeOfStay: purposeOfStayRef.current?.value,
       remarks: remarksRef.current?.value,
       user_id: state.user?._id,
       email: state.user?.email,
@@ -92,6 +96,7 @@ const BookCard = ({ id, children, role }) => {
     }
   }
   const paymentHandler = async (e) => {
+    console.log('datapolicy ', dataPolicy)
     e.preventDefault()
     if (role == 'customer' && !state.isAuth) {
       dispatch({ type: 'OPEN_LOGIN_MODAL' })
@@ -101,13 +106,15 @@ const BookCard = ({ id, children, role }) => {
           diffRef.current > 0 &&
           noAdult > 0 &&
           noAdult <= data?.maxAdult &&
-          noChildren <= data?.maxChildren) ||
+          noChildren <= data?.maxChildren &&
+          dataPolicy) ||
         (arrayOfVaccination.length > 0 &&
           diffRef.current > 0 &&
           nameRef.current?.value &&
           noAdult > 0 &&
           noAdult <= data?.maxAdult &&
-          noChildren <= data?.maxChildren)
+          noChildren <= data?.maxChildren &&
+          dataPolicy)
       ) {
         setLoading(true)
         uploadFile()
@@ -137,7 +144,7 @@ const BookCard = ({ id, children, role }) => {
   const [noAdult, setNoAdult] = useState(0)
   const [noChildren, setNoChildren] = useState(0)
   const [extraBeds, setExtraBeds] = useState(0)
-  const purposeOfStayRef = useRef()
+  // const purposeOfStayRef = useRef()
   const remarksRef = useRef()
   const roomRef = useRef()
   const [total, setTotal] = useState(data?.price)
@@ -430,10 +437,25 @@ const BookCard = ({ id, children, role }) => {
                       />
                     </div>
                     <div>
-                      <label htmlFor="noOfExtraBeds">No of Extra Beds</label>
+                      {bedError && (
+                        <span className="text-rose-500">
+                          Number of beds has exceeded the given maximum
+                          capacity.
+                          <br />
+                        </span>
+                      )}
+                      <label htmlFor="noOfExtraBeds">
+                        No of Extra Beds (max of {data?.maxBed})
+                      </label>
                       <input
                         onChange={(e) => {
                           let ct = e.target.value
+
+                          if (parseInt(ct) >= data?.maxChildren) {
+                            setBedError(true)
+                          } else {
+                            setBedError(false)
+                          }
                           if (ct >= 0) {
                             setExtraBeds(parseInt(ct))
                             if (diffRef.current) {
@@ -487,7 +509,7 @@ const BookCard = ({ id, children, role }) => {
                           )}
                       </select>
                     </div>
-                    <div>
+                    {/* <div>
                       <label htmlFor="purposeOfStay">Purpose of stay</label>
                       <select
                         ref={purposeOfStayRef}
@@ -498,7 +520,7 @@ const BookCard = ({ id, children, role }) => {
                         <option value="Occassion">Occassion</option>
                         <option value="One Night">One Night</option>
                       </select>
-                    </div>
+                    </div> */}
                     <div>
                       <label htmlFor="remarks">Remarks/ Requests</label>
                       <input
@@ -509,9 +531,9 @@ const BookCard = ({ id, children, role }) => {
                       />
                     </div>
                     {role == 'customer' && (
-                      <div>
+                      <div className="col-span-2">
                         <label htmlFor="id">
-                          Vaccinations cards and valid IDs for each guest
+                          Vaccination Cards and valid IDs for each guest
                         </label>
                         <p>Note: Maximum of 10 uploads</p>
                         {arrayOfVaccination.length < 10 && (
@@ -520,33 +542,52 @@ const BookCard = ({ id, children, role }) => {
                             type="file"
                             id="id"
                             onChange={(e) => {
-                              setArrayOfVaccination([
-                                ...arrayOfVaccination,
-                                {
-                                  url: URL.createObjectURL(e.target.files[0]),
-                                  file: e.target.files[0],
-                                },
-                              ])
+                              try {
+                                setArrayOfVaccination([
+                                  ...arrayOfVaccination,
+                                  {
+                                    url: URL?.createObjectURL(
+                                      e.target.files[0]
+                                    ),
+                                    file: e.target.files[0],
+                                  },
+                                ])
+                              } catch (er) {
+                                console.log(er)
+                              }
                             }}
                             accept="image/*"
                           />
                         )}
                       </div>
                     )}
-                    <div></div>
-                    <div className="col-span-2 flex flex-wrap gap-4">
+                    <div className="col-span-2 flex flex-wrap">
                       {arrayOfVaccination.map(({ url }, index) => (
                         <div
                           key={index}
-                          className="relative   bg-slate-900/40 "
+                          className="relative aspect-square w-1/2 bg-slate-900/40"
                           onClick={() => removeImageHandler(index)}
                         >
-                          <div className="absolute z-50 flex h-full w-full cursor-pointer items-center justify-center bg-slate-700/50 p-2 text-center font-semibold text-white">
+                          <div className="absolute z-50 flex aspect-square h-full w-full cursor-pointer items-center justify-center bg-slate-700/50 p-2 text-center font-semibold text-white">
                             <span className="text-md">Remove</span>
                           </div>
-                          <img src={url} className="h-24 w-24 object-cover" />
+                          <img
+                            src={url}
+                            className="aspect-square object-cover"
+                          />
                         </div>
                       ))}
+                    </div>
+                    <div className="col-span-2">
+                      <input
+                        type="checkbox"
+                        id="policy"
+                        onChange={() => setDataPolicy(!dataPolicy)}
+                      />
+                      <label className="ml-2 font-semibold" htmlFor="policy">
+                        I have agree to submit my Vaccination Card along with my
+                        Valid ID’s
+                      </label>
                     </div>
                   </div>
                   <h1 className="my-4 text-2xl text-slate-900">CheckOut:</h1>

@@ -58,7 +58,7 @@ export default async (req, res) => {
     } else {
       res.json({
         success: false,
-        errors: { usernameError: 'Wrong passwod or username!' },
+        errors: { usernameError: 'Wrong password or username!' },
       })
     }
   }

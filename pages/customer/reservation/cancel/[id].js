@@ -135,8 +135,12 @@ const CancelReservation = () => {
           <div className="mb-2">
             <p className="">Mode of Money Transfer for Refund</p>
             <p className="text-slate-500">
-              Note: 5% of your total payment will be deducted. This will serve
-              as the transaction fee.
+              Note: 5% of your total balance will be deducted. This will serve
+              as the transaction fee for the company. The money will be
+              transferred manually and will not be automatically refunded.
+              Please wait for at least 3 minutes to transfer your money back. An
+              email will be sent to registered email address to notify you that
+              the refund is already success.
             </p>
           </div>
           {/* mode of payment  */}

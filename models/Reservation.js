@@ -44,10 +44,10 @@ const ReservationSchema = new mongoose.Schema({
   voucherCode: {
     type: String,
   },
-  purposeOfStay: {
-    type: String,
-    required: [true, 'Please fill up this field'],
-  },
+  // purposeOfStay: {
+  //   type: String,
+  //   required: [true, 'Please fill up this field'],
+  // },
   remarks: {
     type: String,
   },
@@ -75,6 +75,12 @@ const ReservationSchema = new mongoose.Schema({
   },
   end_expiration: {
     type: Date,
+  },
+  requestComment: {
+    type: String,
+  },
+  cancelComment: {
+    type: String,
   },
 })
 
