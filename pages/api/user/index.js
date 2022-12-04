@@ -43,8 +43,19 @@ export default async (req, res) => {
       if (age?.trim() == '' || age == undefined) {
         newError = { ...newError, ageError: 'Please enter age!' }
       }
-      if (password?.trim() == '' || password == undefined) {
-        newError = { ...newError, passwordError: 'Please enter password!' }
+      if (
+        password?.trim() == '' ||
+        password == undefined ||
+        password.length < 8 ||
+        !/[a-z]/.test(password) ||
+        !/[A-Z]/.test(password) ||
+        !/[0-9]/.test(password)
+      ) {
+        newError = {
+          ...newError,
+          passwordError:
+            'Password must be atleast 1 small, capital, and number (atleast 8 character password)!',
+        }
       }
       if (lastName?.trim() == '' || lastName == undefined) {
         newError = { ...newError, lastNameError: 'Please enter lastName!' }

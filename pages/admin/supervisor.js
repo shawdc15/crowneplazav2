@@ -48,12 +48,12 @@ const Supervisor = () => {
   return (
     <>
       <Head>
-        <title>Supervisor | Crowné Plaza</title>
+        <title>HK Supervisor | Crowné Plaza</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AdminMain
         searchKey="email"
-        title="Supervisor"
+        title="Housekeeping Supervisor"
         data_headers={data_headers}
         data_items={state.selectedData}
       />

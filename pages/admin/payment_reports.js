@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import { AdminMain } from '../../components'
 import { paymentReports } from '../../services/receipt.services'
+import Script from 'next/script'
+import moment from 'moment'
 
 const Payment = () => {
   const [data, setData] = useState()
@@ -45,12 +47,15 @@ const Payment = () => {
       key: 'created_at',
     },
   ]
+
   return (
     <>
       <Head>
         <title>Payment Reports | Crowné Plaza</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {/* <Script src="../../services/fileSaver.js" /> */}
+      <Script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js" />
       <AdminMain
         searchKey="_id"
         title="Payment Reports"

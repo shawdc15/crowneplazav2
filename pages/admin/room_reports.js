@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import { AdminMain } from '../../components'
 import { getLogs } from '../../services/logreport.services'
+import Script from 'next/script'
 
 const RoomReports = () => {
   const [data, setData] = useState()
@@ -43,6 +44,8 @@ const RoomReports = () => {
         <title>Room Reports | Crowné Plaza</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js" />
+
       <AdminMain
         searchKey="reservationStatus"
         title="Room Reports"

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ModalLayout from '../Layout/ModalLayout'
 import { useAppContext } from '../../context/AppContext'
 import {
@@ -34,9 +34,9 @@ const RoomModal = ({ setModal, mode }) => {
 
   const [error, setError] = useState({})
   const uploadFile = () => {
-    if (imageUpload == null) return
-    const imageRef = ref(storage, `images/${imageUpload.name + v4()}`)
-    uploadBytes(imageRef, imageUpload).then((snapshot) => {
+    if (imageUpload?.file == null) return
+    const imageRef = ref(storage, `images/${imageUpload.file.name + v4()}`)
+    uploadBytes(imageRef, imageUpload.file).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
         imageUrlRef.current = url
         finalHandler()
@@ -237,7 +237,7 @@ const RoomModal = ({ setModal, mode }) => {
               ref={maxBedRef}
               className=" my-2 rounded-md border border-slate-300 px-4 py-3"
               placeholder="Max Bed"
-              defaultValue={state.adminModalData?.maxBedRef || 0}
+              defaultValue={state.adminModalData?.maxBed || 0}
             />
 
             <span className="text-rose-500">{error?.roomNoError}</span>
@@ -279,15 +279,26 @@ const RoomModal = ({ setModal, mode }) => {
             <label className="mt-2 text-slate-600">Image</label>
             <input
               type="file"
-              onChange={(event) => {
-                setImageUpload(event.target.files[0])
+              onChange={(e) => {
+                try {
+                  setImageUpload({
+                    url: URL?.createObjectURL(e.target?.files[0]),
+                    file: e.target?.files[0],
+                  })
+                } catch (e) {
+                  console.log(e)
+                }
               }}
               accept="image/*"
               className=" my-2 rounded-md border border-slate-300 px-4 py-3"
             />
             {mode == 'edit' && (
               <img
-                src={state.adminModalData.image || '/thumbnail.png'}
+                src={
+                  imageUpload?.url ||
+                  state.adminModalData.image ||
+                  '/thumbnail.png'
+                }
                 alt={'/thumbnail.png'}
                 className="aspect-video w-full object-cover"
               />

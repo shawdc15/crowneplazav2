@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
 import { AdminMain } from '../../components'
 import { cancellationReports } from '../../services/receipt.services'
+import Script from 'next/script'
 
 const Cancellation = () => {
   const [data, setData] = useState()
@@ -56,6 +57,8 @@ const Cancellation = () => {
         <title>Cancellation Reports | Crowné Plaza</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js" />
+
       <AdminMain
         searchKey="_id"
         title="Cancellation Reports"

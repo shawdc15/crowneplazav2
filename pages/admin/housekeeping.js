@@ -43,12 +43,12 @@ const Housekeeping = () => {
   return (
     <>
       <Head>
-        <title>Housekeeping | Crowné Plaza</title>
+        <title>Cleaners | Crowné Plaza</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AdminMain
         searchKey="email"
-        title="Housekeeping"
+        title="Cleaners"
         data_headers={data_headers}
         data_items={state.selectedData}
       />

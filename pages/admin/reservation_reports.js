@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
 import { AdminMain } from '../../components'
 import { reservationReports } from '../../services/reservation.services'
+import Script from 'next/script'
 
 const ReservationReports = () => {
   const [data, setData] = useState()
@@ -49,34 +50,14 @@ const ReservationReports = () => {
     //   key: 'voucherCode',
     // },
   ]
-  const data_items = [
-    {
-      id: '10001',
-      name: 'John Doe',
-      checkin: '03/20/2022',
-      checkout: '03/21/2022',
-      roomType: 'Standard',
-      roomNo: '201',
-      extraBeds: 1,
-      voucherCode: 'None',
-    },
-    {
-      id: '10002',
-      name: 'Steve Harvey',
-      checkin: '03/20/2022',
-      checkout: '03/22/2022',
-      roomType: 'Executive',
-      roomNo: '601',
-      extraBeds: 0,
-      voucherCode: 'FREEGRAB',
-    },
-  ]
   return (
     <>
       <Head>
         <title>Reservation Reports | Crowné Plaza</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js" />
+
       <AdminMain
         searchKey="_id"
         title="Reservation Reports"

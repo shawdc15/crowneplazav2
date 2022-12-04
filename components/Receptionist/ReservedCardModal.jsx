@@ -124,14 +124,14 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
 
         console.log(emailData)
         await declinedReceipt(emailData)
-        await updateStatus(id, {
-          cancelComment:
-            status == 'approve_cancellation'
-              ? backUpMessage
-              : reason.length > 0
-              ? reason
-              : backUpMessage,
-        })
+        // await updateStatus(id, {
+        //   cancelComment:
+        //     status == 'approve_cancellation'
+        //       ? backUpMessage
+        //       : reason.length > 0
+        //       ? reason
+        //       : backUpMessage,
+        // })
       }
       const newData = data.filter((item) => item._id != id)
       setData(newData)
@@ -232,8 +232,7 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
                         Total Paid: &#8369; {formatTotal(total)}
                       </p>
                     )}
-                    {(status == 'request cancellation' ||
-                      status == 'requested') && (
+                    {status == 'requested' && (
                       <textarea
                         ref={reasonref}
                         placeholder="Indicate the reason why you decline"

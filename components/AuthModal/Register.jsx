@@ -1,6 +1,9 @@
 import React, { useRef, useState } from 'react'
 import { CloseSvg } from '../Svg'
-import { authRegister } from '../../services/user.services'
+import {
+  authRegister,
+  sendVerificationLink,
+} from '../../services/user.services'
 import { useAppContext } from '../../context/AppContext'
 import ModalLayout from '../Layout/ModalLayout'
 
@@ -53,11 +56,19 @@ const Register = () => {
       confirmPassword: confirmPasswordRef.current.value,
     }
     setTimeout(async () => {
-      const { errors } = await authRegister(credentials)
-      if (errors) {
-        dispatch({ type: 'REGISTER_ERROR', value: { ...errors } })
+      const res = await authRegister(credentials)
+      if (res.errors) {
+        dispatch({ type: 'REGISTER_ERROR', value: { ...res.errors } })
       } else {
         dispatch({ type: 'REGISTER_SUCCESS' })
+        const newData = {
+          fullname: `${res.data.firstName} ${res.data.lastName} `,
+          link: res.data._id,
+          email: res.data.email,
+          subject: 'verification',
+        }
+        setAgree(false)
+        await sendVerificationLink(newData)
       }
     }, 1000)
   }
@@ -168,15 +179,18 @@ const Register = () => {
                       onChange={() => setAgree(!agree)}
                       type="checkbox"
                       className="mr-2"
+                      id="agree"
                     />
-                    Click here to indicate that you have read and agree to the{' '}
-                    <a
-                      target="_blank"
-                      className="text-emerald-500 underline"
-                      href="/terms-and-agreement.pdf"
-                    >
-                      Terms and conditions
-                    </a>
+                    <label for="agree">
+                      Click here to indicate that you have read and agree to the{' '}
+                      <a
+                        target="_blank"
+                        className="text-emerald-500 underline"
+                        href="/terms-and-agreement.pdf"
+                      >
+                        Terms and conditions
+                      </a>
+                    </label>
                   </p>
                   {agree ? (
                     <>
@@ -222,7 +236,8 @@ const Register = () => {
               <div>
                 <div className="flex items-center justify-between">
                   <p className="py-4 text-center text-xl">
-                    Registered Successfully!
+                    Registered Successfully, We sent a confimation link to your
+                    email to verify your account.
                   </p>
                   <button
                     className="ml-2 p-2"

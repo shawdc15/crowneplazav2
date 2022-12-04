@@ -35,3 +35,16 @@ export const getAllStaff = async (role) => {
   const result = await res.json()
   return result
 }
+
+export const authStaffLogin = async (newData) => {
+  const res = await fetch('/api/auth/stafflogin', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newData),
+  })
+  const result = await res.json()
+  return result
+}

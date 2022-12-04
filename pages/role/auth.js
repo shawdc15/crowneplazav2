@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useAppContext } from '../../context/AppContext'
+import { authStaffLogin } from '../../services/staff.services'
 const Auth = () => {
   const { state, dispatch } = useAppContext()
   const { isLoading, error } = state
-  const usernameRef = useRef()
+  const emailRef = useRef()
   const router = useRouter()
   const passwordRef = useRef()
   const loginHandler = async (e) => {
@@ -13,35 +14,42 @@ const Auth = () => {
 
     console.log('working')
     const newData = {
-      username: usernameRef.current.value,
+      email: emailRef.current.value,
       password: passwordRef.current.value,
     }
-    setTimeout(() => {
-      let errors
-
-      const { username, password } = newData
-      if (username == 'receptionist' && password == '123') {
-        dispatch({ type: 'LOGIN_ERROR', value: { ...errors } })
-
-        router.push('/receptionist/book')
-      } else if (username == 'manager' && password == '123') {
-        router.push('/manager/rooms')
-        dispatch({ type: 'LOGIN_ERROR', value: { ...errors } })
-      } else if (username == 'housekeeping' && password == '123') {
-        router.push('/housekeeping/rooms')
-        dispatch({ type: 'LOGIN_ERROR', value: { ...errors } })
-      } else if (username == 'admin' && password == '123') {
-        router.push('/admin')
-        dispatch({ type: 'LOGIN_ERROR', value: { ...errors } })
+    setTimeout(async () => {
+      // const { username, password } = newData
+      const res = await authStaffLogin(newData)
+      console.log(res)
+      if (res?.errors) {
+        dispatch({ type: 'LOGIN_ERROR', value: { ...res.errors } })
       } else {
-        errors = { usernameError: 'Wrong password or username!' }
-        dispatch({ type: 'LOGIN_ERROR', value: { ...errors } })
+        let role = res.data.role
+
+        if (role == 'receptionists') {
+          dispatch({ type: 'LOGIN_SUCCESS', value: { ...res?.data } })
+          router.push('/receptionist/book')
+        } else if (role == 'manager') {
+          router.push('/manager/rooms')
+          dispatch({ type: 'LOGIN_SUCCESS', value: { ...res?.data } })
+        } else if (role == 'housekeeping') {
+          router.push('/housekeeping/rooms')
+          dispatch({ type: 'LOGIN_SUCCESS', value: { ...res?.data } })
+        } else if (role == 'admin') {
+          router.push('/admin')
+          dispatch({ type: 'LOGIN_SUCCESS', value: { ...res?.data } })
+        } else {
+          dispatch({
+            type: 'LOGIN_ERROR',
+            value: { emailError: 'Wrong password or email!' },
+          })
+        }
       }
     }, 1000)
   }
-  const forgotHandler = () => {
-    console.log('forgot')
-  }
+  // const forgotHandler = () => {
+  //   console.log('forgot')
+  // }
   return (
     <div className="m-auto">
       <div className="flex flex-col rounded-lg border-2 p-4 ">
@@ -52,16 +60,17 @@ const Auth = () => {
           <p className="py-4 text-center text-2xl">Welcome Back</p>
         </div>
         <form className="flex flex-col" onSubmit={loginHandler}>
-          <span className="text-rose-500">{error?.usernameError}</span>
+          <span className="text-rose-500">{error?.emailError}</span>
           <input
-            type="text"
-            ref={usernameRef}
+            type="email"
+            ref={emailRef}
             className=" my-2 rounded-md border border-slate-300 px-4 py-3"
-            placeholder="Username"
+            placeholder="Email"
           />
           <span className="text-rose-500">{error?.passwordError}</span>
           <input
             ref={passwordRef}
+            defaultValue="crowneplaza2022"
             type="password"
             className="my-2 rounded-md border border-slate-300 px-4 py-3 "
             placeholder="Password"

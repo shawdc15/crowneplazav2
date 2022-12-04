@@ -24,7 +24,7 @@ const AdminSidebar = ({ nav }) => {
           link: '/admin/manager',
         },
         {
-          name: 'Supervisor',
+          name: 'HK Supervisor',
           link: '/admin/supervisor',
         },
         {
@@ -36,7 +36,7 @@ const AdminSidebar = ({ nav }) => {
           link: '/admin/guest_attendants',
         },
         {
-          name: 'Housekeeping',
+          name: 'Cleaners',
           link: '/admin/housekeeping',
         },
         {
@@ -50,20 +50,20 @@ const AdminSidebar = ({ nav }) => {
       link: '/admin/rooms',
       subItem: null,
     },
-    {
-      name: 'Systems Users',
-      link: null,
-      subItem: [
-        {
-          name: 'Administrators',
-          link: '/admin/administrator',
-        },
-        {
-          name: 'Receptionists',
-          link: '/admin/user_receptionists',
-        },
-      ],
-    },
+    // {
+    //   name: 'Systems Users',
+    //   link: null,
+    //   subItem: [
+    //     {
+    //       name: 'Administrators',
+    //       link: '/admin/administrator',
+    //     },
+    //     {
+    //       name: 'Receptionists',
+    //       link: '/admin/user_receptionists',
+    //     },
+    //   ],
+    // },
     {
       name: 'Reservation Reports',
       link: '/admin/reservation_reports',

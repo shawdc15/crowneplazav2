@@ -135,3 +135,17 @@ export const getGuestList = async () => {
   const result = await res.json()
   return result
 }
+
+export const sendVerificationLink = async (newData) => {
+  // console.log('id', newData)
+  const res = await fetch(`/api/sendGrid`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newData),
+  })
+  const result = await res.json()
+  return result
+}

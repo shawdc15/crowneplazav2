@@ -1,23 +1,23 @@
 import { sign } from 'jsonwebtoken'
 import { serialize } from 'cookie'
 import dbConnect from '../../../utils/dbConnect'
-import User from '../../../models/User'
+import Staff from '../../../models/Staff'
 
 dbConnect()
 
-const secret = process.env.SECRET
+const secret = process.env.ADMINSECRET
 
 export default async (req, res) => {
-  const { username, password } = req.body
+  const { email, password } = req.body
   let newError = {}
-  if (username?.trim() == '' || username == undefined) {
-    newError = { ...newError, usernameError: 'Please enter username!' }
+  if (email?.trim() == '' || email == undefined) {
+    newError = { ...newError, emailError: 'Please enter email!' }
   }
   if (password?.trim() == '' || password == undefined) {
     newError = { ...newError, passwordError: 'Please enter password!' }
   }
   if (
-    newError.hasOwnProperty('usernameError') ||
+    newError.hasOwnProperty('emailError') ||
     newError.hasOwnProperty('passwordError')
   ) {
     res.json({
@@ -27,11 +27,11 @@ export default async (req, res) => {
   } else {
     let result = null
     try {
-      const user = await User.findOne({
-        username,
+      const user = await Staff.findOne({
+        email,
         password,
         status: true,
-      }).select(['-password', '-role', '-__v'])
+      }).select(['-password', '-__v'])
       result = user
     } catch (error) {
       console.log(error)
@@ -58,7 +58,7 @@ export default async (req, res) => {
     } else {
       res.json({
         success: false,
-        errors: { usernameError: 'Wrong password or username!' },
+        errors: { emailError: 'Wrong password or email!' },
       })
     }
   }

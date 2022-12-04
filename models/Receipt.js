@@ -10,7 +10,8 @@ const ReceiptSchema = new mongoose.Schema({
   },
   // paymentMethod: {
   //   type: String,
-  //   required: [true, 'Please fill up this field'],
+  //   // required: [true, 'Please fill up this field'],
+  //   default: 'Paypal',
   // },
   creditCardNumber: {
     type: String,

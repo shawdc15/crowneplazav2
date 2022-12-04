@@ -44,10 +44,6 @@ const ReservationSchema = new mongoose.Schema({
   voucherCode: {
     type: String,
   },
-  // purposeOfStay: {
-  //   type: String,
-  //   required: [true, 'Please fill up this field'],
-  // },
   remarks: {
     type: String,
   },
@@ -70,16 +66,10 @@ const ReservationSchema = new mongoose.Schema({
     type: String,
   },
   vaccination: { type: [{ type: String }] },
-  start_expiration: {
-    type: Date,
-  },
   end_expiration: {
     type: Date,
   },
   requestComment: {
-    type: String,
-  },
-  cancelComment: {
     type: String,
   },
 })
@@ -87,18 +77,3 @@ const ReservationSchema = new mongoose.Schema({
 module.exports =
   mongoose.models.Reservation ||
   mongoose.model('Reservation', ReservationSchema)
-
-// const sample = {
-//   "checkIn":"2022-02-01",
-//   "checkOut":"2022-02-01",
-//   "preferredRoom":"201",
-//   "noOfGuest":"0",
-//   "noOfAdult":"2",
-//   "noOfChildren":"3",
-//   "noOfExtraBed":"2",
-//   "voucherCode":"grab2020",
-//   "purposeOfStay":"vacation",
-//   "remarks":"Please make it clean",
-//   "accomodation_id":"123456789",
-//   "status":"pending",
-// }

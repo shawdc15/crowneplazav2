@@ -35,6 +35,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: 'customer',
   },
+  status: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 module.exports = mongoose.models.User || mongoose.model('User', UserSchema)

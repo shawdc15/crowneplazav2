@@ -49,6 +49,136 @@ const AdminTable = ({
   const filteredData = data_items?.filter((item) =>
     item[searchKey]?.includes(search)
   )
+  const downloadFile = () => {
+    let newArr = null
+
+    switch (title) {
+      case 'Payment Reports':
+        newArr = data_items.map(
+          ({ paymentMethod, gcashNumber, reservation_id, _v, ...rest }) => {
+            return {
+              'ID No#.': reservation_id,
+              'Reference No.': rest._id,
+              Name: rest.receiptFor,
+              Channel: rest.channel,
+              'Room No': rest.preferredRoom,
+              'Room Type': rest.roomType,
+              Amount: rest.total,
+              // 'Payment Status': rest.status,
+              'Date Of Payment': moment(rest.created_at).format(
+                'MMM DD, YYYY hh:mm:ss A'
+              ),
+            }
+          }
+        )
+        break
+      case 'Reservation Reports':
+        newArr = data_items.map(
+          ({
+            _id,
+            name,
+            checkIn,
+            checkOut,
+            roomType,
+            preferredRoom,
+            noOfExtraBed,
+            status,
+          }) => {
+            return {
+              'ID No#.': _id,
+              Name: name,
+              'Check-In': moment(checkIn).format('MMM DD YYYY hh:mm:ss A'),
+              'Check-Out': moment(checkOut).format('MMM DD YYYY hh:mm:ss A'),
+              'Room Type': roomType,
+              'Room No#': preferredRoom,
+              'Extra Beds': noOfExtraBed,
+              Status: status.toUpperCase(),
+            }
+          }
+        )
+        break
+      case 'Cancellation Reports':
+        newArr = data_items.map(
+          ({
+            reservation_id,
+            _id,
+            receiptFor,
+            channel,
+            preferredRoom,
+            roomType,
+            total,
+            reason,
+            created_at,
+          }) => {
+            return {
+              'ID No#': reservation_id,
+              'Reference No.': _id,
+              Name: receiptFor,
+              Channel: channel,
+              'Room No#': preferredRoom,
+              'Room Type': roomType,
+              Amount: total,
+              Reason: reason,
+              'Date Of Payment': moment(created_at).format(
+                'MMM DD, YYYY hh:mm:ss A'
+              ),
+            }
+          }
+        )
+        break
+      case 'Room Reports':
+        newArr = data_items.map(
+          ({
+            _id,
+            date,
+            preferredRoom,
+            roomType,
+            reservationStatus,
+            roomStatus,
+          }) => {
+            return {
+              'ID No#': _id,
+              Date: moment(date).format('MMM DD, YYYY hh:mm:ss A'),
+              'Room No#': preferredRoom,
+              'Room Type': roomType,
+              'Room Status': roomStatus,
+              'Reservation Status': reservationStatus,
+            }
+          }
+        )
+        break
+      case 'Cleaner Reports':
+        newArr = data_items.map(
+          ({
+            _id,
+            date,
+            cleaner,
+            verifiedBy,
+            reservationStatus,
+            roomStatus,
+          }) => {
+            return {
+              'ID No#': _id,
+              Date: moment(date).format('MMM DD, YYYY hh:mm:ss A'),
+              Cleaner: cleaner,
+              'Verified By': verifiedBy,
+              'Reservation Status': reservationStatus,
+              'Room Status': roomStatus,
+            }
+          }
+        )
+        break
+      default:
+        return
+    }
+    var myFile = `${title.toLowerCase().replace(' ', '_')}_${moment().format(
+      'YYYY-MM-DD hh:mm:ss'
+    )}.xlsx`
+    var myWorkSheet = XLSX.utils.json_to_sheet(newArr)
+    var myWorkBook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(myWorkBook, myWorkSheet, 'myWorkSheet')
+    XLSX.writeFile(myWorkBook, myFile)
+  }
   return (
     <>
       <div>
@@ -75,14 +205,31 @@ const AdminTable = ({
         </div>
         <div className="flex items-center justify-between gap-4">
           <p className="text-2xl font-semibold">{title}</p>
-          {!viewing.includes(modalType) && (
-            <button
-              onClick={addHandler}
-              className="my-2 rounded-md bg-slate-900 px-4 py-2 text-slate-300 hover:text-white"
-            >
-              Add
-            </button>
-          )}
+          <div>
+            {data_items &&
+              [
+                'Payment Reports',
+                'Cancellation Reports',
+                'Reservation Reports',
+                'Room Reports',
+                'Cleaner Reports',
+              ].includes(title) && (
+                <button
+                  onClick={() => downloadFile()}
+                  className="rounded-md bg-violet-500 px-4 py-2 text-white"
+                >
+                  Download as Excel
+                </button>
+              )}
+            {!viewing.includes(modalType) && (
+              <button
+                onClick={addHandler}
+                className="my-2 rounded-md bg-slate-900 px-4 py-2 text-slate-300 hover:text-white"
+              >
+                Add
+              </button>
+            )}
+          </div>
         </div>
       </div>
       <div className="w-full overflow-auto">

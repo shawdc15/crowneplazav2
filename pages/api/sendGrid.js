@@ -31,6 +31,10 @@ async function sendEmail(req, res) {
       finalHtml = declinedCancel(req.body)
       sub = 'Declined Reservation Request'
       break
+    case 'verification':
+      finalHtml = verification(req.body)
+      sub = 'Email Verification'
+      break
     default:
       break
   }
@@ -49,6 +53,64 @@ async function sendEmail(req, res) {
 
   return res.status(200).json({ success: true })
 }
+const styles = `<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+    *{
+      font-family: 'Poppins', sans-serif;
+    }
+    #card-bottom{
+      padding:20px;
+      text-align:center;
+    }
+    #card-top{
+      display:flex;
+      background:#0F172A;
+      padding:1rem;
+      align-items:center;
+    }
+    #card-top> div {
+      margin:0 auto;
+    }
+    #card-top p {
+      font-size:28pt;
+      color:#fff;
+      border-bottom:5px solid #2AB981;
+      font-weight:bolder;
+    }
+</style>`
+const verification = ({ fullname, link }) => {
+  const finalLink = process.env.CUSTOM_EMAIL + 'confirmation/' + link
+
+  return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Crowne Plaza</title>
+    <meta name="description" content="Crowne Plaza">
+    <meta name="author" content="SitePoint">
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+    ${styles}
+  </head>
+  <body>
+    <div>
+      <div id="card-top">
+        <div class="">
+          <p>Crowne Plaza</p>
+        </div>
+      </div>
+      <div id="card-bottom">
+        <p style="font-weight:bold;font-size:14pt;">Hello ${fullname}</p>
+        <p style="font-weight:bold;font-size:14pt;">Please click the link below to confirm your email address.</p>
+        <a href="${finalLink}" style="font-size:14pt;">
+         ${finalLink}
+        </a>
+        <p style="width:100%;text-align:center;">Ignore this message if you did not requested it.</p>
+      </div>
+    </div>
+  </body>
+  </html>`
+}
 
 const resetPassword = ({ fullname, link }) => {
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -60,31 +122,7 @@ const resetPassword = ({ fullname, link }) => {
     <meta name="author" content="SitePoint">
     <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
     <link rel="stylesheet" href="css/styles.css?v=1.0">
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-        *{
-          font-family: 'Poppins', sans-serif;
-        }
-        #card-bottom{
-          padding:20px;
-          text-align:center;
-        }
-        #card-top{
-          display:flex;
-          background:#0F172A;
-          padding:1rem;
-          align-items:center;
-        }
-        #card-top> div {
-          margin:0 auto;
-        }
-        #card-top p {
-          font-size:28pt;
-          color:#fff;
-          border-bottom:5px solid #2AB981;
-          font-weight:bolder;
-        }
-    </style>
+    ${styles}
   </head>
   <body>
     <div>
@@ -391,8 +429,14 @@ const declinedCancel = ({ name, message }) => {
     <meta name="author" content="SitePoint">
     <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
     <link rel="stylesheet" href="css/styles.css?v=1.0">
-    </head>
+    ${styles}
+  </head>
   <body>
+    <div id="card-top">
+      <div class="">
+        <p>Crowne Plaza</p>
+      </div>
+    </div>
     <span>Dear Ms./Mr. ${name},</span><br>
     <p style="text-indent: 50px;">${message}
         <br/>
@@ -415,8 +459,14 @@ const approvedRequest = ({ name }) => {
     <meta name="author" content="SitePoint">
     <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
     <link rel="stylesheet" href="css/styles.css?v=1.0">
-    </head>
+    ${styles}  
+  </head>
   <body>
+    <div id="card-top">
+      <div class="">
+        <p>Crowne Plaza</p>
+      </div>
+    </div>
     <span>Hello, ${name}
     <br/>We have already approved your request for your reservation. Please be mindful with our health protocols. Please do not forget to bring your vaccination cards as we will check it again once you are already in our hotel. Your 50% balance should be paid upon checking-in in our hotel. Please coordinate with our Hotel Receptionist to confirm your identity and reservation.
     <br/>Thank you and enjoy your stay! 

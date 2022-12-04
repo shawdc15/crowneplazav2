@@ -451,7 +451,7 @@ const BookCard = ({ id, children, role }) => {
                         onChange={(e) => {
                           let ct = e.target.value
 
-                          if (parseInt(ct) >= data?.maxChildren) {
+                          if (parseInt(ct) > data?.maxChildren) {
                             setBedError(true)
                           } else {
                             setBedError(false)
@@ -578,17 +578,21 @@ const BookCard = ({ id, children, role }) => {
                         </div>
                       ))}
                     </div>
-                    <div className="col-span-2">
-                      <input
-                        type="checkbox"
-                        id="policy"
-                        onChange={() => setDataPolicy(!dataPolicy)}
-                      />
-                      <label className="ml-2 font-semibold" htmlFor="policy">
-                        I have agree to submit my Vaccination Card along with my
-                        Valid ID’s
-                      </label>
-                    </div>
+
+                    {/* customer only  */}
+                    {role == 'customer' && (
+                      <div className="col-span-2">
+                        <input
+                          type="checkbox"
+                          id="policy"
+                          onChange={() => setDataPolicy(!dataPolicy)}
+                        />
+                        <label className="ml-2 font-semibold" htmlFor="policy">
+                          I have agree to submit my Vaccination Card along with
+                          my Valid ID’s
+                        </label>
+                      </div>
+                    )}
                   </div>
                   <h1 className="my-4 text-2xl text-slate-900">CheckOut:</h1>
                   <table className="w-full p-4">

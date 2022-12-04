@@ -5,15 +5,17 @@ import { AdminMain, AdminSidebar } from '../../components'
 import { getAllCalendar } from '../../services/calendar.services'
 import moment from 'moment'
 import { MenuSvg } from '../../components/Svg'
+import Script from 'next/script'
 
 const TaskReports = () => {
   const [data, setData] = useState()
   useEffect(async () => {
-    const { success, data } = await getAllCalendar()
-    if (success) {
-      setData(data)
+    const res = await getAllCalendar()
+    if (res.success) {
+      setData(res.data)
     }
   }, [])
+  console.log(data)
   const noStatus = ['_id', 'date', 'cleaner', 'roomNo', 'verifiedBy']
   const data_headers = [
     {
@@ -56,6 +58,78 @@ const TaskReports = () => {
     { name: 'Others 2', key: 'others2' },
     { name: 'Others 3', key: 'others3' },
   ]
+  const downloadHandller = () => {
+    const newArr = data.map(
+      ({
+        _id,
+        date,
+        cleaner,
+        roomNo,
+        verifiedBy,
+        cleanBedroom,
+        cleanToilet,
+        cleanWindows,
+        cleanFridge,
+        cleanFurnitures,
+        cleanBathtub,
+        sweepFloor,
+        mopFloor,
+        emptyTrash,
+        changeBedsheets,
+        changePillowCase,
+        changeBlankets,
+        changeTowels,
+        changeTrashBags,
+        replaceToiletries,
+        replaceRugs,
+        others1,
+        others2,
+        others3,
+      }) => {
+        return {
+          'ID No#': _id,
+          Date: moment(date).format('MMM DD, YYYY hh:mm:ss A'),
+          Cleaner: cleaner,
+          'Room No#': roomNo,
+          'Verified By': verifiedBy,
+          'Clean Bedroom':
+            cleanBedroom?.taskStatus || cleanBedroom?.notes || '',
+          'Clean Toilet': cleanToilet?.taskStatus || cleanToilet?.notes || '',
+          'Clean Windows':
+            cleanWindows?.taskStatus || cleanWindows?.notes || '',
+          'Clean Fridge': cleanFridge?.taskStatus || cleanFridge?.notes || '',
+          'Clean Furnitures':
+            cleanFurnitures?.taskStatus || cleanFurnitures?.notes || '',
+          'Clean Bathtub':
+            cleanBathtub?.taskStatus || cleanBathtub?.notes || '',
+          'Sweep Floor': sweepFloor?.taskStatus || sweepFloor?.notes || '',
+          'Mop Floor': mopFloor?.taskStatus || mopFloor?.notes || '',
+          'Empty Trash': emptyTrash?.taskStatus || emptyTrash?.notes || '',
+          'Change Bedsheets':
+            changeBedsheets?.taskStatus || changeBedsheets?.notes || '',
+          'Change Pillowcase':
+            changePillowCase?.taskStatus || changePillowCase?.notes || '',
+          'Change Blanket':
+            changeBlankets?.taskStatus || changeBlankets?.notes || '',
+          'Change Towels':
+            changeTowels?.taskStatus || changeTowels?.notes || '',
+          'Change Trashbags':
+            changeTrashBags?.taskStatus || changeTrashBags?.notes || '',
+          'Replace Toiletries':
+            replaceToiletries?.taskStatus || replaceToiletries?.notes || '',
+          'Replace Rugs': replaceRugs?.taskStatus || replaceRugs?.notes || '',
+          'Others 1': others1?.taskStatus || others1?.notes || '',
+          'Others 2': others2?.taskStatus || others2?.notes || '',
+          'Others 3': others3?.taskStatus || others3?.notes || '',
+        }
+      }
+    )
+    var myFile = `task_reports_${moment().format('YYYY-MM-DD hh:mm:ss')}.xlsx`
+    var myWorkSheet = XLSX.utils.json_to_sheet(newArr)
+    var myWorkBook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(myWorkBook, myWorkSheet, 'myWorkSheet')
+    XLSX.writeFile(myWorkBook, myFile)
+  }
   const [search, setSearch] = useState('')
   const [nav, setNav] = useState(false)
   const filteredData = data?.filter((item) => item['cleaner']?.includes(search))
@@ -65,6 +139,7 @@ const TaskReports = () => {
         <title>Task Reports | Crowné Plaza</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js" />
 
       <div className={`flex min-h-screen ${nav ? 'overflow-hidden' : ''}`}>
         <AdminSidebar nav={nav} />
@@ -93,6 +168,12 @@ const TaskReports = () => {
             </div>
             <div className="flex items-center justify-between gap-4">
               <p className="text-2xl font-semibold">Task Reports</p>
+              <button
+                onClick={() => downloadHandller()}
+                className="rounded-md bg-violet-500 px-4 py-2 text-white"
+              >
+                Download as Excel
+              </button>
             </div>
           </div>
           <table className="mt-4 w-full table-auto text-sm">

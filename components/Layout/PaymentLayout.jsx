@@ -13,7 +13,7 @@ const PaymentLayout = ({
 
   const paymentHandler = async () => {
     let temp_error = null
-    if (phoneNumberRef.current.value.length != 11) {
+    if (phoneNumberRef.current.value.length != 10) {
       temp_error = ['Please provide the correct number and must be 10 digits']
     }
     const newData = {

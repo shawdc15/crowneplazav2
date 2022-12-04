@@ -121,6 +121,7 @@ export const AppReducer = (state, action) => {
     }
     case 'LOGIN_SUCCESS': {
       localStorage.setItem('access_id', action.value._id)
+      localStorage.setItem('role', action.value.role)
       return {
         ...state,
         isAuth: true,
