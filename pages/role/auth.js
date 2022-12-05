@@ -9,6 +9,7 @@ const Auth = () => {
   const router = useRouter()
   const passwordRef = useRef()
   const loginHandler = async (e) => {
+    
     dispatch({ type: 'LOGIN_REQUEST' })
     e.preventDefault()
 
