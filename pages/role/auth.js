@@ -9,7 +9,6 @@ const Auth = () => {
   const router = useRouter()
   const passwordRef = useRef()
   const loginHandler = async (e) => {
-    
     dispatch({ type: 'LOGIN_REQUEST' })
     e.preventDefault()
 
@@ -36,7 +35,7 @@ const Auth = () => {
         } else if (role == 'housekeeping') {
           router.push('/housekeeping/rooms')
           dispatch({ type: 'LOGIN_SUCCESS', value: { ...res?.data } })
-        } else if (role == 'admin') {
+        } else if (role == 'administrator') {
           router.push('/admin')
           dispatch({ type: 'LOGIN_SUCCESS', value: { ...res?.data } })
         } else {
