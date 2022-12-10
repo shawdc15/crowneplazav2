@@ -13,12 +13,11 @@ export default async (req, res) => {
       return res.json({ success: false, message: 'no token' })
     }
     const user = verify(jwt, secret)
-    const user_data = await User.findById(user.id).select([
-      '-password',
-      '-role',
-      '-__v',
-    ])
-    res.json({ success: true, data: user_data })
+    const user_data = await User.findById(user.id).select(['-password', '-__v'])
+    if (user_data.role == 'customer') {
+      return res.json({ success: true, data: user_data })
+    }
+    res.status(400).json({ success: false })
   } catch (error) {
     res.status(400).json({ success: false })
   }

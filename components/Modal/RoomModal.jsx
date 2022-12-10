@@ -14,8 +14,11 @@ import {
 } from 'firebase/storage'
 import { storage } from '../../services/firebase'
 import { v4 } from 'uuid'
+import { CloseSvg } from '../Svg'
 
 const RoomModal = ({ setModal, mode }) => {
+  const [selectedLargeImage, setSelectedLargeImage] = useState(null)
+
   const [imageUpload, setImageUpload] = useState(null)
   const imageUrlRef = useRef()
   const [disabled, setDisabled] = useState(false)
@@ -111,8 +114,11 @@ const RoomModal = ({ setModal, mode }) => {
         descriptionError: 'Description must not be empty',
       }
     }
-    if (priceRef.current.value.trim().length < 1) {
-      tempError = { ...tempError, priceError: 'Rate must not be empty' }
+    if (priceRef.current.value.length < 1 || priceRef.current.value < 1) {
+      tempError = {
+        ...tempError,
+        priceError: 'Price must not be empty and not less than 1',
+      }
     }
     if (roomNoRef.current.value.trim().length < 1) {
       tempError = { ...tempError, roomNoError: 'Room No must not be empty' }
@@ -248,6 +254,8 @@ const RoomModal = ({ setModal, mode }) => {
 
             <input
               type="text"
+              min={1}
+              max={9999}
               ref={roomNoRef}
               className=" my-2 rounded-md border border-slate-300 px-4 py-3"
               placeholder="101,102"
@@ -292,16 +300,46 @@ const RoomModal = ({ setModal, mode }) => {
               accept="image/*"
               className=" my-2 rounded-md border border-slate-300 px-4 py-3"
             />
-            {mode == 'edit' && (
-              <img
-                src={
-                  imageUpload?.url ||
-                  state.adminModalData.image ||
-                  '/thumbnail.png'
+
+            {selectedLargeImage != null && (
+              <div className="absolute top-0 left-0 flex h-full w-full  items-center justify-center bg-black/60">
+                <div className="relative">
+                  <span
+                    onClick={() => setSelectedLargeImage(null)}
+                    className="absolute right-2 top-2 flex cursor-pointer items-center justify-center rounded-full bg-black/30 p-2"
+                  >
+                    <CloseSvg />
+                  </span>
+                  <img
+                    className="z-50 h-screen max-h-note bg-white object-cover"
+                    src={selectedLargeImage}
+                  />
+                </div>
+              </div>
+            )}
+            {/* {mode == 'edit' && ( */}
+            <img
+              src={
+                imageUpload?.url ||
+                state.adminModalData?.image ||
+                '/thumbnail.png'
+              }
+              alt={'/thumbnail.png'}
+              className="aspect-video w-full object-cover"
+            />
+            {/* )} */}
+            {(imageUpload?.url || state.adminModalData?.image) && (
+              <button
+                type="button"
+                onClick={() =>
+                  setSelectedLargeImage(
+                    imageUpload?.url || state.adminModalData.image
+                  )
                 }
-                alt={'/thumbnail.png'}
-                className="aspect-video w-full object-cover"
-              />
+                className=" mt-5 rounded-md bg-slate-900 p-2 text-white"
+              >
+                View full screen
+              </button>
             )}
           </div>
         </div>

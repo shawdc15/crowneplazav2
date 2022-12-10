@@ -451,7 +451,7 @@ const BookCard = ({ id, children, role }) => {
                         onChange={(e) => {
                           let ct = e.target.value
 
-                          if (parseInt(ct) > data?.maxChildren) {
+                          if (parseInt(ct) > data?.maxBed) {
                             setBedError(true)
                           } else {
                             setBedError(false)

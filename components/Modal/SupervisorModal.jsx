@@ -36,8 +36,8 @@ const SupervisorModal = ({ setModal, mode }) => {
     if (lastNameRef.current.value.trim().length < 1) {
       tempError = { ...tempError, lastNameError: 'Last Name must not be empty' }
     }
-    if (contactRef.current.value.trim().length < 1) {
-      tempError = { ...tempError, contactError: 'Contact must not be empty' }
+    if (contactRef.current.value.length != 10) {
+      tempError = { ...tempError, contactError: 'Contact must have 10 digits' }
     }
     setError(tempError)
     if (Object.keys(tempError)?.length == 0) {
@@ -119,7 +119,6 @@ const SupervisorModal = ({ setModal, mode }) => {
               {state.adminModalData?.email}
             </p>
           )}
-
           <span className="text-rose-500">{error?.usernameError}</span>
           <label className="mt-2 text-slate-600">Sector</label>
           <input
@@ -138,7 +137,6 @@ const SupervisorModal = ({ setModal, mode }) => {
             placeholder="First Name"
             defaultValue={state.adminModalData?.firstName}
           />
-
           <span className="text-rose-500">{error?.lastNameError}</span>
           <label className="mt-2 text-slate-600">Last Name</label>
           <input
@@ -148,16 +146,21 @@ const SupervisorModal = ({ setModal, mode }) => {
             placeholder="Last Name"
             defaultValue={state.adminModalData?.lastName}
           />
-
-          <span className="text-rose-500">{error?.contactError}</span>
-          <label className="mt-2 text-slate-600">Contact</label>
-          <input
-            type="number"
-            ref={contactRef}
-            className="my-2 w-full rounded-md border border-slate-300 px-4 py-3"
-            placeholder="Contact"
-            defaultValue={state.adminModalData?.contact}
-          />
+          <div className="flex w-full flex-col">
+            <span className="text-rose-500">{error?.contactError}</span>
+            <label className="mt-2 text-slate-600">Contact Number</label>
+            <div className="relative flex items-center ">
+              <span className="absolute left-4">+63</span>
+              <input
+                id="fix"
+                ref={contactRef}
+                type="number"
+                className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 pl-12 "
+                placeholder="9xxxxxxxxx"
+                defaultValue={state.adminModalData?.contact}
+              />
+            </div>
+          </div>
         </div>
         <span className="text-rose-500">{error?.shiftError}</span>
         <label className="mt-2 text-slate-600">Shift</label>
@@ -172,26 +175,12 @@ const SupervisorModal = ({ setModal, mode }) => {
         <label className="mt-2 text-slate-600">Status of Employment</label>
         <select
           ref={employmentRef}
+          defaultValue={state.adminModalData?.statusofemployment}
           className="my-2 w-full rounded-md border border-slate-300 px-4 py-3"
         >
-          <option
-            value="working"
-            selected={state.adminModalData?.statusofemployment == 'working'}
-          >
-            Working
-          </option>
-          <option
-            value="resigned"
-            selected={state.adminModalData?.statusofemployment == 'resigned'}
-          >
-            Resigned
-          </option>
-          <option
-            value="leave"
-            selected={state.adminModalData?.statusofemployment == 'leave'}
-          >
-            Leave
-          </option>
+          <option value="working">Working</option>
+          <option value="resigned">Resigned</option>
+          <option value="leave">Leave</option>
         </select>
         <div className="my-4">
           <button className="w-full cursor-pointer rounded-md bg-emerald-500 py-2 text-white">

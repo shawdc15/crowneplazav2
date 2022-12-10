@@ -53,8 +53,7 @@ export default async (req, res) => {
       ) {
         newError = {
           ...newError,
-          passwordError:
-            'Password must be atleast 1 small, capital, and number (atleast 8 character password)!',
+          passwordError: 'Please follow the format given in the reminder below',
         }
       }
       if (lastName?.trim() == '' || lastName == undefined) {

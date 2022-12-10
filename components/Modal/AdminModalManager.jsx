@@ -17,7 +17,7 @@ const AdminModalManager = ({ modalType, setModal, mode }) => {
         return <GuestModal setModal={setModal} mode={mode} />
       case 'Manager':
         return <ManagerModal setModal={setModal} mode={mode} />
-      case 'HK Supervisor':
+      case 'Housekeeping Supervisor':
         return <SupervisorModal setModal={setModal} mode={mode} />
       case 'Rooms':
         return <RoomModal setModal={setModal} mode={mode} />

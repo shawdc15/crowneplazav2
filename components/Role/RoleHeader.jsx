@@ -3,8 +3,10 @@ import Link from 'next/link'
 import { MenuSvg, CloseSvg } from '../Svg'
 import { useAppContext } from '../../context/AppContext'
 import NavItems from './NavItems'
+import { useRouter } from 'next/router'
+import { authLogout } from '../../services/user.services'
 const RoleHeader = ({ active, role }) => {
-  const { state, dispatch } = useAppContext()
+  const router = useRouter()
   const [menuSidebarStatus, setMenuSidebarStatus] = useState(false)
   const receptionist_links = [
     {
@@ -45,6 +47,12 @@ const RoleHeader = ({ active, role }) => {
       defaultActive: 'calendar',
     },
   ]
+  const logoutHandler = async () => {
+    const res = await authLogout()
+    if (res.success) {
+      router.push('/role')
+    }
+  }
   const manager_links = [
     {
       name: 'Rooms',
@@ -128,11 +136,12 @@ const RoleHeader = ({ active, role }) => {
             />
           }
           <li>
-            <Link href="/role">
-              <button className="cursor-pointer px-4 py-3 text-2xl font-semibold text-slate-300 transition-colors duration-300 hover:text-emerald-500 lg:text-sm lg:text-slate-800">
-                Logout
-              </button>
-            </Link>
+            <button
+              onClick={logoutHandler}
+              className="cursor-pointer px-4 py-3 text-2xl font-semibold text-slate-300 transition-colors duration-300 hover:text-emerald-500 lg:text-sm lg:text-slate-800"
+            >
+              Logout
+            </button>
           </li>
         </ul>
       </div>

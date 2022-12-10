@@ -159,6 +159,10 @@ const Register = () => {
                     </div>
                   </div>
                   <span className="text-rose-500">{error?.passwordError}</span>
+                  <label className="text-sm">
+                    Password reminder: must contain atleast 1 small, capital and
+                    number (atleast 8 character password)
+                  </label>
                   <input
                     type="password"
                     ref={passwordRef}

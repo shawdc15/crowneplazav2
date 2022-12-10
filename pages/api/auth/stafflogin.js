@@ -5,7 +5,7 @@ import Staff from '../../../models/Staff'
 
 dbConnect()
 
-const secret = process.env.ADMINSECRET
+const secret = process.env.SECRET
 
 export default async (req, res) => {
   const { email, password } = req.body
@@ -42,7 +42,7 @@ export default async (req, res) => {
         {
           exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
           id: result._id,
-          role: result._role,
+          role: result.role,
         },
         secret
       )

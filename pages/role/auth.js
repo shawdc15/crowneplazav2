@@ -32,7 +32,7 @@ const Auth = () => {
         } else if (role == 'manager') {
           router.push('/manager/rooms')
           dispatch({ type: 'LOGIN_SUCCESS', value: { ...res?.data } })
-        } else if (role == 'housekeeping') {
+        } else if (role == 'supervisor') {
           router.push('/housekeeping/rooms')
           dispatch({ type: 'LOGIN_SUCCESS', value: { ...res?.data } })
         } else if (role == 'administrator') {
@@ -70,7 +70,6 @@ const Auth = () => {
           <span className="text-rose-500">{error?.passwordError}</span>
           <input
             ref={passwordRef}
-            defaultValue="crowneplaza2022"
             type="password"
             className="my-2 rounded-md border border-slate-300 px-4 py-3 "
             placeholder="Password"

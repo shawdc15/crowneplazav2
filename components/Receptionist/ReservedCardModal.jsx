@@ -7,6 +7,7 @@ import {
   updateStatus,
 } from '../../services/reservation.services'
 import { declinedReceipt } from '../../services/receipt.services'
+import { CloseSvg } from '../Svg'
 const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
   console.log(id)
   console.log(data)
@@ -303,14 +304,19 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
                       </div>
                     </div>
                     {selectedLargeImage != null && (
-                      <div
-                        onClick={() => setSelectedLargeImage(null)}
-                        className="absolute top-0 left-0 flex h-full w-full cursor-zoom-out items-center justify-center"
-                      >
-                        <img
-                          className="z-50 max-h-imageLg w-imageLg bg-white object-cover"
-                          src={selectedLargeImage}
-                        />
+                      <div className="absolute top-0 left-0 flex h-full w-full  items-center justify-center bg-black/60">
+                        <div className="relative">
+                          <span
+                            onClick={() => setSelectedLargeImage(null)}
+                            className="absolute right-2 top-2 flex cursor-pointer items-center justify-center rounded-full bg-black/30 p-2"
+                          >
+                            <CloseSvg />
+                          </span>
+                          <img
+                            className="z-50 h-screen max-h-note bg-white object-cover"
+                            src={selectedLargeImage}
+                          />
+                        </div>
                       </div>
                     )}
                   </>

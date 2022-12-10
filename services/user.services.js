@@ -72,7 +72,7 @@ export const getUser = async () => {
   return result
 }
 
-export const authLogout = async (newData) => {
+export const authLogout = async () => {
   const res = await fetch('/api/auth/logout', {
     method: 'POST',
     headers: {

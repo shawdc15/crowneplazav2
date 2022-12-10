@@ -145,16 +145,20 @@ const GuestModal = ({ setModal, mode }) => {
             placeholder="Last Name"
             defaultValue={state.adminModalData?.lastName}
           />
-
-          <span className="text-rose-500">{error?.contactError}</span>
-          <label className="mt-2 text-slate-600">Contact</label>
-          <input
-            type="number"
-            ref={contactRef}
-            className=" my-2 rounded-md border border-slate-300 px-4 py-3"
-            placeholder="Contact"
-            defaultValue={state.adminModalData?.contact}
-          />
+          <div className="flex w-full flex-col">
+            <span className="text-rose-500">{error?.contactError}</span>
+            <div className="relative flex items-center ">
+              <span className="absolute left-4">+63</span>
+              <input
+                id="fix"
+                ref={contactRef}
+                type="number"
+                className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 pl-12 lg:ml-2"
+                placeholder="Contact Number"
+                defaultValue={state.adminModalData?.contact}
+              />
+            </div>
+          </div>
         </div>
         <div className="my-4">
           <button className="w-full cursor-pointer rounded-md bg-emerald-500 py-2 text-white">

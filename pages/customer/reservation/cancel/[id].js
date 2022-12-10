@@ -75,11 +75,16 @@ const CancelReservation = () => {
       status: 'request cancellation',
       contact: receiptData.gcashNumber,
     }
-    console.log(receiptData)
-    const update_res = await updateStatus(id, newData)
-    if (update_res.success) {
-      const res = await postCancellationReceipt(receiptData)
 
+    const update_res = await updateStatus(id, newData)
+    console.log(update_res)
+
+    if (update_res.success) {
+      const res = await postCancellationReceipt({
+        ...receiptData,
+        receiptFor: data.name,
+      })
+      console.log(res)
       const result = await sendReceipt({
         ...receiptData,
         reference: res?.data._id,
@@ -87,7 +92,7 @@ const CancelReservation = () => {
         name: data?.name,
         email: data?.email,
       })
-      if (res.success) {
+      if (result.success) {
         setModalData(res.data)
       }
     }

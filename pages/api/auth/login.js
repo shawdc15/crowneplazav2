@@ -31,7 +31,7 @@ export default async (req, res) => {
         username,
         password,
         status: true,
-      }).select(['-password', '-role', '-__v'])
+      }).select(['-password', '-__v'])
       result = user
     } catch (error) {
       console.log(error)
@@ -42,7 +42,7 @@ export default async (req, res) => {
         {
           exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
           id: result._id,
-          role: result._role,
+          role: result.role,
         },
         secret
       )

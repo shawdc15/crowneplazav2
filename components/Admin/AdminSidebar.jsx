@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useAppContext } from '../../context/AppContext'
+import { authLogout } from '../../services/user.services'
 import { ArrowDown, ArrowUp } from '../Svg'
 
 const AdminSidebar = ({ nav }) => {
@@ -50,20 +51,20 @@ const AdminSidebar = ({ nav }) => {
       link: '/admin/rooms',
       subItem: null,
     },
-    // {
-    //   name: 'Systems Users',
-    //   link: null,
-    //   subItem: [
-    //     {
-    //       name: 'Administrators',
-    //       link: '/admin/administrator',
-    //     },
-    //     {
-    //       name: 'Receptionists',
-    //       link: '/admin/user_receptionists',
-    //     },
-    //   ],
-    // },
+    {
+      name: 'Systems Users',
+      link: null,
+      subItem: [
+        {
+          name: 'Administrators',
+          link: '/admin/administrator',
+        },
+        //     {
+        //       name: 'Receptionists',
+        //       link: '/admin/user_receptionists',
+        //     },
+      ],
+    },
     {
       name: 'Reservation Reports',
       link: '/admin/reservation_reports',
@@ -99,6 +100,12 @@ const AdminSidebar = ({ nav }) => {
       link: '/admin/task_reports',
     },
   ]
+  const logoutHandler = async () => {
+    const res = await authLogout()
+    if (res.success) {
+      router.push('/role')
+    }
+  }
   return (
     <div
       className={`${
@@ -175,13 +182,12 @@ const AdminSidebar = ({ nav }) => {
             </p>
           </Link>
         ))}
-        <Link href="/role">
-          <p
-            className={`cursor-pointer py-2 px-10  text-sm hover:bg-slate-900 hover:text-white`}
-          >
-            Logout
-          </p>
-        </Link>
+        <button
+          onClick={logoutHandler}
+          className={`w-full cursor-pointer py-2 px-10 text-left  text-sm hover:bg-slate-900 hover:text-white`}
+        >
+          Logout
+        </button>
       </div>
     </div>
   )
