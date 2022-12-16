@@ -44,10 +44,7 @@ const BookCard = ({ id, children, role }) => {
       )
       uploadBytes(imageRef, arrayOfVaccination[i].file).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
-          arrayOfVaccinationRef.current = [
-            ...arrayOfVaccinationRef.current,
-            url,
-          ]
+          arrayOfVaccinationRef.current.push(url)
           if (arrayOfVaccination.length == i + 1) {
             finalHandler()
           }
@@ -96,8 +93,8 @@ const BookCard = ({ id, children, role }) => {
     }
   }
   const paymentHandler = async (e) => {
-    console.log('datapolicy ', dataPolicy)
     e.preventDefault()
+    console.log(arrayOfVaccination)
     if (role == 'customer' && !state.isAuth) {
       dispatch({ type: 'OPEN_LOGIN_MODAL' })
     } else {
