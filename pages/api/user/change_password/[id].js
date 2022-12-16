@@ -1,5 +1,6 @@
 import dbConnect from '../../../../utils/dbConnect'
 import User from '../../../../models/User'
+import bcrypt from 'bcrypt'
 
 dbConnect()
 
@@ -40,18 +41,28 @@ export default async (req, res) => {
         })
       } else {
         try {
-          const user = await User.findOneAndUpdate(
-            { _id: id, password: oldPassword },
-            {
-              password: newPassword,
-            },
-            {
-              new: true,
-              runValidators: true,
-            }
+          const old = await User.findById(id)
+          console.log(old)
+          const decryptPassword = await bcrypt.compare(
+            oldPassword,
+            old.password
           )
-          if (user) {
-            return res.status(200).json({ success: true })
+          const salt = await bcrypt.genSalt(Number(process.env.SALT))
+          const hashPassword = await bcrypt.hash(newPassword, salt)
+          if (decryptPassword) {
+            const user = await User.findByIdAndUpdate(
+              { _id: id },
+              {
+                password: hashPassword,
+              },
+              {
+                new: true,
+                runValidators: true,
+              }
+            )
+            if (user) {
+              return res.status(200).json({ success: true })
+            }
           }
           return res.status(400).json({
             success: false,
