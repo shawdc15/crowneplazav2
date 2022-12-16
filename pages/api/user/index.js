@@ -1,5 +1,6 @@
 import dbConnect from '../../../utils/dbConnect'
 import User from '../../../models/User'
+import bcrypt from 'bcrypt'
 
 dbConnect()
 
@@ -78,7 +79,12 @@ export default async (req, res) => {
         })
       } else {
         try {
-          const user = await User.create(req.body)
+          const salt = await bcrypt.genSalt(Number(process.env.SALT))
+          const hashPassword = await bcrypt.hash(req.body.password, salt)
+          const user = await User.create({
+            ...req.body,
+            password: hashPassword,
+          })
           res.status(201).json({ success: true, data: user })
         } catch (error) {
           console.log(error)

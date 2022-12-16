@@ -14,7 +14,7 @@ const profile = () => {
   const lastnameRef = useRef()
   const usernameRef = useRef()
   const emailRef = useRef()
-  const contactRef = useRef()
+  const [contact, setContact] = useState(state.user?.contact)
   const ageRef = useRef()
 
   const saveHandler = async (e) => {
@@ -26,7 +26,7 @@ const profile = () => {
       lastName: lastnameRef.current.value,
       username: state?.user?.username,
       email: emailRef.current.value,
-      contact: contactRef.current.value,
+      contact: contact,
       age: ageRef.current.value,
     }
     if (JSON.stringify(data) == JSON.stringify(state?.user)) {
@@ -150,16 +150,22 @@ const profile = () => {
                     <span className="text-rose-500">
                       {errors?.contactError}
                     </span>
-                    <label className="text-slate-900" htmlFor="contact">
+                    <label className="text-slate-900" htmlFor="fix">
                       Contact Number
                     </label>
-                    <input
-                      className="my-2 rounded-md border border-slate-300 px-4 py-3 "
-                      ref={contactRef}
-                      type="number"
-                      id="contact"
-                      defaultValue={state.user?.contact}
-                    />
+                    <div className="relative flex items-center ">
+                      <span className="absolute left-4">+63</span>
+                      <input
+                        id="fix"
+                        className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 pl-12"
+                        placeholder="9xxxxxxxxx"
+                        type="number"
+                        onChange={(e) => {
+                          setContact(e.target.value.slice(0, 10))
+                        }}
+                        value={contact}
+                      />
+                    </div>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-rose-500">{errors?.ageError}</span>

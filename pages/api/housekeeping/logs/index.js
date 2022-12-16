@@ -1,6 +1,5 @@
 import dbConnect from '../../../../utils/dbConnect'
 import LogReport from '../../../../models/LogReport'
-
 dbConnect()
 
 export default async (req, res) => {

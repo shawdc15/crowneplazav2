@@ -10,14 +10,15 @@ const PaymentLayout = ({
 }) => {
   const [error, setError] = useState(null)
   const [method, setMethod] = useState('Paypal')
+  const [phoneNumber, setPhoneNumber] = useState()
 
   const paymentHandler = async () => {
     let temp_error = null
-    if (phoneNumberRef.current.value.length != 10) {
+    if (phoneNumber.length != 10) {
       temp_error = ['Please provide the correct number and must be 10 digits']
     }
     const newData = {
-      gcashNumber: phoneNumberRef.current.value.trim(),
+      gcashNumber: phoneNumber.trim(),
       ...metaData,
       channel: method,
       status: mode == 'confirmation' ? 'paid' : 'pending',
@@ -32,7 +33,6 @@ const PaymentLayout = ({
     }
     setError(temp_error)
   }
-  const phoneNumberRef = useRef()
 
   const gcash = () => {
     return (
@@ -41,8 +41,11 @@ const PaymentLayout = ({
           <span className="absolute left-4">+63</span>
           <input
             id="fix"
-            ref={phoneNumberRef}
             type="number"
+            onChange={(e) => {
+              setPhoneNumber(e.target.value.slice(0, 10))
+            }}
+            value={phoneNumber}
             className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 pl-12 lg:ml-2"
             placeholder="Phone Number"
           />

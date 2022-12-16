@@ -5,6 +5,7 @@ import moment from 'moment'
 import {
   getCalendarDataByDate,
   addCalendarData,
+  updateCalendarData,
 } from '../../services/calendar.services'
 import { addLogs } from '../../services/logreport.services'
 const HouseKeeping = ({ role }) => {
@@ -39,16 +40,17 @@ const HouseKeeping = ({ role }) => {
       roomName: item.roomName,
       roomNo: item.roomNo,
       date: item.date,
-      roomStatus: roomStatusRef.current?.value || data?.roomStatus,
-      reservationStatus: reservationStatusRef.current.value,
+      roomStatus: item.roomStatus,
+      reservationStatus: item.reservationStatus,
     }
-    const { success } = await addCalendarData(newData)
+    console.log(newData)
+    const { success } = await updateCalendarData(item._id, newData)
     if (success) {
       const newLogs = {
         preferredRoom: item.roomNo,
         roomType: item.roomName,
-        roomStatus: roomStatusRef.current?.value || data?.roomStatus,
-        reservationStatus: reservationStatusRef.current.value,
+        roomStatus: newData.roomStatus,
+        reservationStatus: newData.reservationStatus,
         cleaner: item.cleaner,
         verifiedBy: 'John Doe',
       }
@@ -121,8 +123,13 @@ const HouseKeeping = ({ role }) => {
                           <select
                             className="bg-transparent p-4"
                             defaultValue={item[key]}
-                            onChange={() => changeHandler(item)}
-                            ref={roomStatusRef}
+                            onChange={(e) =>
+                              changeHandler({
+                                ...item,
+                                roomStatus: e.target.value || item.roomStatus,
+                              })
+                            }
+                            // ref={roomStatusRef}
                           >
                             <option value="Clean">Clean</option>
                             <option value="Dirty">Dirty</option>
@@ -133,8 +140,14 @@ const HouseKeeping = ({ role }) => {
                           <select
                             className="bg-transparent p-4"
                             defaultValue={item[key]}
-                            onChange={() => changeHandler(item)}
-                            ref={reservationStatusRef}
+                            onChange={(e) =>
+                              changeHandler({
+                                ...item,
+                                reservationStatus:
+                                  e.target.value || item.reservationStatus,
+                              })
+                            }
+                            // ref={reservationStatusRef}
                           >
                             <option value="Not Reserved">Not Reserved</option>
                             <option value="Reserved">Reserved</option>

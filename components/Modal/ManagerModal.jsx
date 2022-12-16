@@ -7,7 +7,7 @@ const ManagerModal = ({ setModal, mode }) => {
   const emailRef = useRef(state.adminModalData?.email)
   const lastNameRef = useRef()
   const firstNameRef = useRef()
-  const contactRef = useRef()
+  const [contact, setContact] = useState(state.adminModalData?.contact)
   const employmentRef = useRef()
   const [error, setError] = useState({})
 
@@ -30,7 +30,7 @@ const ManagerModal = ({ setModal, mode }) => {
     if (lastNameRef.current.value.trim().length < 1) {
       tempError = { ...tempError, lastNameError: 'Last Name must not be empty' }
     }
-    if (contactRef.current.value.length != 10) {
+    if (contact.length != 10) {
       tempError = { ...tempError, contactError: 'Contact must have 10 digits' }
     }
     setError(tempError)
@@ -42,7 +42,8 @@ const ManagerModal = ({ setModal, mode }) => {
             : emailRef.current?.value,
         firstName: firstNameRef.current.value,
         lastName: lastNameRef.current.value,
-        contact: contactRef.current.value,
+        contact: contact,
+        password: 'crowneplaza2022',
         role: 'manager',
         statusofemployment: employmentRef.current?.value,
       }
@@ -56,6 +57,7 @@ const ManagerModal = ({ setModal, mode }) => {
 
           setModal(false)
         } else {
+          console.log(res.errors)
           setError(res.errors)
         }
       } else {
@@ -138,11 +140,14 @@ const ManagerModal = ({ setModal, mode }) => {
               <span className="absolute left-4">+63</span>
               <input
                 id="fix"
-                ref={contactRef}
+                onChange={(e) => {
+                  setContact(e.target.value.slice(0, 10))
+                }}
+                value={contact}
                 type="number"
+                p
                 className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 pl-12"
                 placeholder="9xxxxxxxxx"
-                defaultValue={state.adminModalData?.contact}
               />
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { CloseSvg } from '../Svg'
+import { CloseSvg, NotVisible, VisibleSvg } from '../Svg'
 import {
   authRegister,
   sendVerificationLink,
@@ -8,13 +8,16 @@ import { useAppContext } from '../../context/AppContext'
 import ModalLayout from '../Layout/ModalLayout'
 
 const Register = () => {
+  const [passwordToggle, setPasswordToggle] = useState(false)
+  const [confirmPasswordToggle, setConfirmPasswordToggle] = useState(false)
+
   const { state, dispatch } = useAppContext()
   const { error, isRegistered, isLoading } = state
   const [agree, setAgree] = useState(false)
   const emailRef = useRef()
   const passwordRef = useRef()
   const confirmPasswordRef = useRef()
-  const contactRef = useRef()
+  const [contact, setContact] = useState('')
   const firstNameRef = useRef()
   const lastNameRef = useRef()
   const ageRef = useRef()
@@ -24,7 +27,7 @@ const Register = () => {
     e.preventDefault()
 
     dispatch({ type: 'REGISTER_REQUEST' })
-    if (contactRef.current.value.length != 10) {
+    if (contact.length != 10) {
       dispatch({
         type: 'REGISTER_ERROR',
         value: {
@@ -48,13 +51,14 @@ const Register = () => {
     const credentials = {
       username: usernameRef.current.value.trim(),
       email: emailRef.current.value.trim(),
-      contact: contactRef.current.value.trim(),
+      contact: contact.trim(),
       age: ageRef.current.value.trim(),
       password: passwordRef.current.value,
       lastName: lastNameRef.current.value,
       firstName: firstNameRef.current.value,
       confirmPassword: confirmPasswordRef.current.value,
     }
+    // console.log(credentials)
     setTimeout(async () => {
       const res = await authRegister(credentials)
       if (res.errors) {
@@ -150,8 +154,11 @@ const Register = () => {
                         <span className="absolute left-4">+63</span>
                         <input
                           id="fix"
-                          ref={contactRef}
                           type="number"
+                          onChange={(e) => {
+                            setContact(e.target.value.slice(0, 10))
+                          }}
+                          value={contact}
                           className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 pl-12 lg:ml-2"
                           placeholder="Contact Number"
                         />
@@ -163,21 +170,42 @@ const Register = () => {
                     Password reminder: must contain atleast 1 small, capital and
                     number (atleast 8 character password)
                   </label>
-                  <input
-                    type="password"
-                    ref={passwordRef}
-                    className="my-2 rounded-md border border-slate-300 px-4 py-3 "
-                    placeholder="Password"
-                  />
+                  <div className="relative">
+                    <input
+                      type={passwordToggle ? 'text' : 'password'}
+                      ref={passwordRef}
+                      className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
+                      placeholder="Password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setPasswordToggle(!passwordToggle)}
+                      className="absolute top-5 right-3 cursor-pointer"
+                    >
+                      {passwordToggle ? <VisibleSvg /> : <NotVisible />}
+                    </button>
+                  </div>
                   <span className="text-rose-500">
                     {error?.confirmPasswordError}
                   </span>
-                  <input
-                    type="password"
-                    ref={confirmPasswordRef}
-                    className="my-2 rounded-md border border-slate-300 px-4 py-3 "
-                    placeholder="Confirm Password"
-                  />
+                  <div className="relative">
+                    <input
+                      type={confirmPasswordToggle ? 'text' : 'password'}
+                      ref={confirmPasswordRef}
+                      className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
+                      placeholder="Confirm Password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setConfirmPasswordToggle(!confirmPasswordToggle)
+                      }
+                      className="absolute top-5 right-3 cursor-pointer"
+                    >
+                      {confirmPasswordToggle ? <VisibleSvg /> : <NotVisible />}
+                    </button>
+                  </div>
+
                   <p className="bg-slate-100 p-4">
                     <input
                       onChange={() => setAgree(!agree)}

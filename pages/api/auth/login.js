@@ -2,6 +2,7 @@ import { sign } from 'jsonwebtoken'
 import { serialize } from 'cookie'
 import dbConnect from '../../../utils/dbConnect'
 import User from '../../../models/User'
+import bcrypt from 'bcrypt'
 
 dbConnect()
 
@@ -29,10 +30,14 @@ export default async (req, res) => {
     try {
       const user = await User.findOne({
         username,
-        password,
         status: true,
-      }).select(['-password', '-__v'])
-      result = user
+      })
+      const decryptPassword = await bcrypt.compare(password, user.password)
+      if (decryptPassword) {
+        result = user
+      } else {
+        result = null
+      }
     } catch (error) {
       console.log(error)
     }

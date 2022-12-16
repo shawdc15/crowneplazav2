@@ -2,8 +2,11 @@ import React, { useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useAppContext } from '../../context/AppContext'
 import { authStaffLogin } from '../../services/staff.services'
+import { NotVisible, VisibleSvg } from '../../components/Svg'
 const Auth = () => {
   const { state, dispatch } = useAppContext()
+  const [passwordToggle, setPasswordToggle] = useState(false)
+
   const { isLoading, error } = state
   const emailRef = useRef()
   const router = useRouter()
@@ -68,12 +71,21 @@ const Auth = () => {
             placeholder="Email"
           />
           <span className="text-rose-500">{error?.passwordError}</span>
-          <input
-            ref={passwordRef}
-            type="password"
-            className="my-2 rounded-md border border-slate-300 px-4 py-3 "
-            placeholder="Password"
-          />
+          <div className="relative">
+            <input
+              ref={passwordRef}
+              type={passwordToggle ? 'text' : 'password'}
+              className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
+              placeholder="Password"
+            />
+            <button
+              type="button"
+              onClick={() => setPasswordToggle(!passwordToggle)}
+              className="absolute top-5 right-3 cursor-pointer"
+            >
+              {passwordToggle ? <VisibleSvg /> : <NotVisible />}
+            </button>
+          </div>
           {/* <p
             onClick={forgotHandler}
             className="cursor-pointer py-2 text-emerald-500 underline"

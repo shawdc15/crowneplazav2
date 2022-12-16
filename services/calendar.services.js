@@ -38,8 +38,8 @@ export const addCalendarData = async (newData) => {
   return result
 }
 
-export const updateCalendarData = async (newData) => {
-  const res = await fetch(`/api/housekeeping`, {
+export const updateCalendarData = async (id, newData) => {
+  const res = await fetch(`/api/housekeeping/${id}`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',

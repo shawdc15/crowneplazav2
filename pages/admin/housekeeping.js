@@ -35,7 +35,8 @@ const Housekeeping = () => {
   ]
   useEffect(async () => {
     dispatch({ type: 'CLEAR_SELECTED_DATA' })
-    const { success, data } = await getAllStaff('housekeeping')
+    const { success, data } = await getAllStaff('cleaners')
+    console.log(data)
     if (success) {
       dispatch({ type: 'SET_SELECTED_DATA', value: data })
     }

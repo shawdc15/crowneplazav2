@@ -14,13 +14,13 @@ const StaffSchema = new mongoose.Schema({
   contact: {
     type: String,
   },
-  username: {
-    type: String,
-    unique: true,
-  },
+  // username: {
+  //   type: String,
+  //   unique: true,
+  // },
   password: {
     type: String,
-    default: 'crowneplaza2022',
+    // default: 'crowneplaza2022',
   },
   role: {
     type: String,

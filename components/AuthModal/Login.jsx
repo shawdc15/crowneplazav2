@@ -1,5 +1,5 @@
-import React, { useRef } from 'react'
-import { CloseSvg } from '../Svg'
+import React, { useRef, useState } from 'react'
+import { CloseSvg, NotVisible, VisibleSvg } from '../Svg'
 import { authLogin } from '../../services/user.services'
 import { useAppContext } from '../../context/AppContext'
 import ModalLayout from '../Layout/ModalLayout'
@@ -7,6 +7,7 @@ import Link from 'next/link'
 const Login = () => {
   const { state, dispatch } = useAppContext()
   const { error, isLoading } = state
+  const [passwordToggle, setPasswordToggle] = useState(false)
 
   const usernameRef = useRef()
   const passwordRef = useRef()
@@ -49,12 +50,21 @@ const Login = () => {
                 placeholder="Username"
               />
               <span className="text-rose-500">{error?.passwordError}</span>
-              <input
-                ref={passwordRef}
-                type="password"
-                className="my-2 rounded-md border border-slate-300 px-4 py-3 "
-                placeholder="Password"
-              />
+              <div className="relative">
+                <input
+                  ref={passwordRef}
+                  type={passwordToggle ? 'text' : 'password'}
+                  className="my-2 w-full rounded-md border border-slate-300 px-4 py-3 "
+                  placeholder="Password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setPasswordToggle(!passwordToggle)}
+                  className="absolute top-5 right-3 cursor-pointer"
+                >
+                  {passwordToggle ? <VisibleSvg /> : <NotVisible />}
+                </button>
+              </div>
               <Link href="/customer/forgot_password">
                 <a className="cursor-pointer py-2 text-emerald-500 underline">
                   Forgot Password
