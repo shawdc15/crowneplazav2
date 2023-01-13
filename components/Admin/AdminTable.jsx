@@ -50,27 +50,27 @@ const AdminTable = ({
   const filteredData = ()=>{
     if(title=="Reservation Reports"){
       return data_items?.filter((item) =>
-       item["status"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search.toLowerCase())
+       item["status"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
       )
     }
     else if(title == "Payment Reports"){
       return data_items?.filter((item) =>
-      item["roomType"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search.toLowerCase())
+      item["roomType"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
      )
     }
     else if(title == "Cancellation Reports"){
       return data_items?.filter((item) =>
-      item["roomType"]==filteredButtons[1].getter && item["reason"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search.toLowerCase())
+      item["roomType"]==filteredButtons[1].getter && item["reason"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
      )
     }
     else if(title == "Cleaner Reports"){
       return data_items?.filter((item) =>
-      item["roomStatus"]==filteredButtons[2].getter && item["reservationStatus"]==filteredButtons[1].getter && item["cleaner"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search.toLowerCase())
+      item["roomStatus"]==filteredButtons[2].getter && item["reservationStatus"]==filteredButtons[1].getter && item["cleaner"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
      )
     }
     else{
       return data_items?.filter((item) =>
-      item[searchKey]?.toString()?.toLowerCase()?.includes(search.toLowerCase() )
+      item[searchKey]?.toString()?.toLowerCase()?.includes(search?.toLowerCase() )
       )
     }
   }
@@ -197,7 +197,7 @@ const AdminTable = ({
       default:
         return
     }
-    var myFile = `${title.toLowerCase().replace(' ', '_')}_${moment().format(
+    var myFile = `${title?.toLowerCase().replace(' ', '_')}_${moment().format(
       'YYYY-MM-DD hh:mm:ss'
     )}.xlsx`
     var myWorkSheet = XLSX.utils.json_to_sheet(newArr)
@@ -226,7 +226,7 @@ const AdminTable = ({
             onChange={searchHandler}
             className="my-2 w-full rounded-md border border-slate-300 px-4 py-3"
             type="text"
-            placeholder={searchKey == "_id" ? "Search  ID No#" : "Search " + searchKey.toLowerCase().replace("_"," ")}
+            placeholder={searchKey == "_id" ? "Search  ID No#" : "Search " + searchKey?.toLowerCase().replace("_"," ")}
           />
         </div>
       {  filteredButtons && (
