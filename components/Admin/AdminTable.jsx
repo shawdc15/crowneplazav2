@@ -13,6 +13,7 @@ const AdminTable = ({
   setNav,
   nav,
   searchKey,
+  filteredButtons
 }) => {
   const { state, dispatch } = useAppContext()
   const [modal, setModal] = useState(false)
@@ -46,9 +47,34 @@ const AdminTable = ({
   const searchHandler = (e) => {
     setSearch(e.target.value)
   }
-  const filteredData = data_items?.filter((item) =>
-    item[searchKey]?.includes(search)
-  )
+  const filteredData = ()=>{
+    if(title=="Reservation Reports"){
+      return data_items?.filter((item) =>
+       item["status"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search.toLowerCase())
+      )
+    }
+    else if(title == "Payment Reports"){
+      return data_items?.filter((item) =>
+      item["roomType"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search.toLowerCase())
+     )
+    }
+    else if(title == "Cancellation Reports"){
+      return data_items?.filter((item) =>
+      item["roomType"]==filteredButtons[1].getter && item["reason"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search.toLowerCase())
+     )
+    }
+    else if(title == "Cleaner Reports"){
+      return data_items?.filter((item) =>
+      item["roomStatus"]==filteredButtons[2].getter && item["reservationStatus"]==filteredButtons[1].getter && item["cleaner"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search.toLowerCase())
+     )
+    }
+    else{
+      return data_items?.filter((item) =>
+      item[searchKey]?.toString()?.toLowerCase()?.includes(search.toLowerCase() )
+      )
+    }
+  }
+  console.log(filteredData())
   const downloadFile = () => {
     let newArr = null
 
@@ -200,9 +226,25 @@ const AdminTable = ({
             onChange={searchHandler}
             className="my-2 w-full rounded-md border border-slate-300 px-4 py-3"
             type="text"
-            placeholder="Search here"
+            placeholder={searchKey == "_id" ? "Search  ID No#" : "Search " + searchKey.toLowerCase().replace("_"," ")}
           />
         </div>
+      {  filteredButtons && (
+
+        <div className='flex gap-4'>
+          {filteredButtons.map(({setter,choices,key},index)=>(
+            <div key={index} className="flex flex-col">
+              <label className='text-sm font-semibold'>{key.toUpperCase()}</label>
+            <select  className="my-2 w-full rounded-md border border-slate-300 px-3 py-2" onChange={(e)=>setter(e.target.value)}>
+              <option defaultValue>-----</option>
+            {choices?.map((item,innerIndex)=>(
+              <option value={item} key={innerIndex}>{item}</option>
+              ))}
+            </select>
+              </div>
+          ))}
+        </div>
+          )}
         <div className="flex items-center justify-between gap-4">
           <p className="text-2xl font-semibold">{title}</p>
           <div>
@@ -257,8 +299,8 @@ const AdminTable = ({
             </tr>
           </thead>
           <tbody>
-            {filteredData &&
-              filteredData.map((item, index) => (
+            {filteredData() &&
+              filteredData().map((item, index) => (
                 <tr key={index}>
                   {data_headers &&
                     data_headers.map(({ key }, sub_index) => (
@@ -272,7 +314,7 @@ const AdminTable = ({
                       >
                         {/* {key == 'total' && 'asd'} */}
                         {key == 'name'
-                          ? `${item['firstName']} ${item['lastName']}`
+                          ? `${item['firstName']||""} ${item['lastName']||""}`
                           : key == 'total' || key == 'price'
                           ? formatTotal(item[key])
                           : ['checkIn', 'checkOut'].includes(key)
@@ -284,7 +326,7 @@ const AdminTable = ({
                           : key == 'date' || key == 'created_at'
                           ? moment(item[key]).format('YYYY-MM-DD')
                           : key == 'contact'
-                          ? '(+63)' + item[key]
+                          ? '(+63)' + (item[key]||"")
                           : item[key]}
                       </td>
                     ))}
@@ -300,7 +342,7 @@ const AdminTable = ({
                   )}
                 </tr>
               ))}
-            {filteredData?.length == 0 && (
+            {filteredData()?.length == 0 && (
               <tr>
                 <td
                   colSpan={data_headers.length + 1}

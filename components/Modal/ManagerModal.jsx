@@ -43,11 +43,11 @@ const ManagerModal = ({ setModal, mode }) => {
         firstName: firstNameRef.current.value,
         lastName: lastNameRef.current.value,
         contact: contact,
-        password: 'crowneplaza2022',
         role: 'manager',
         statusofemployment: employmentRef.current?.value,
       }
       if (mode === 'add') {
+        newData.password = 'crowneplaza2022'
         const res = await createStaff(newData)
         if (res.success) {
           dispatch({

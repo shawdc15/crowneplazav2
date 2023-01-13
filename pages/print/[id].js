@@ -6,9 +6,18 @@ const Print = () => {
   const [data, setData] = useState()
   const [isLoading, setIsLoading] = useState()
   const mounted = useRef()
+  const [sessionUser,setSessionUser] = useState("")
   const router = useRouter()
   let id = router.query.id
   useEffect(() => {
+    const role = localStorage.getItem("role")
+    let r = null
+    if (role == 'manager') {
+      r = ' - Manager'
+    } else {
+      r = ' - Housekeeping Supervisor'
+    }
+    setSessionUser(localStorage?.getItem('name')+r )
     const load = async () => {
       if (id) {
         const res = await getHousekeepingById(id)
@@ -78,6 +87,8 @@ const Print = () => {
                 Reservation Status: {data?.reservationStatus || 'Not Reserved'}
               </p>
               <p>Verified By: {data?.verifiedBy}</p>
+              <p>Printed By: {sessionUser}</p>
+              
             </div>
             <button
               id="printbtn"

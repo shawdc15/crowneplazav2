@@ -51,13 +51,14 @@ const SupervisorModal = ({ setModal, mode }) => {
         lastName: lastNameRef.current.value,
         contact: contact,
         role: 'supervisor',
-        password: 'crowneplaza2022',
         sector: sectorRef.current.value,
         shift: shiftRef.current.value,
         statusofemployment: employmentRef.current?.value,
       }
       if (mode === 'add') {
+        newData.password = 'crowneplaza2022'
         const res = await createStaff(newData)
+
         if (res.success) {
           dispatch({
             type: 'SET_SELECTED_DATA',
@@ -127,7 +128,7 @@ const SupervisorModal = ({ setModal, mode }) => {
             ref={sectorRef}
             className="my-2 w-full rounded-md border border-slate-300 px-4 py-3"
             placeholder="Sector"
-            defaultValue={state.adminModalData?.username}
+            defaultValue={state.adminModalData?.sector}
           />
           <span className="text-rose-500">{error?.firstNameError}</span>
           <label className="mt-2 text-slate-600">First Name</label>

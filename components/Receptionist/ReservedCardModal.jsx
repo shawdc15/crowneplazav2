@@ -103,7 +103,7 @@ const ReservedCardModal = ({ setData, data, id, setModal, receipt }) => {
     if (res.success) {
       if (status == 'approve_cancellation') {
         backUpMessage =
-          'Your request for cancellation is approved. The promise amount will be returned to your account, please wait for a while. Thank you.'
+          `We have already received your request for cancellation for your reservation on our hotel. Please do note that we will deduct 5% of your total payment for convenience and transaction fee. For now, please wait for a time to process your refund. You will be notified once it is done. Thank you, Hope we will see you again! We are always pleased to welcome you.`
       } else {
         backUpMessage =
           'Your request for cancellation of the reservation is declined due to unreasonable agenda. We are sorry for the inconvenience and we hope you’ll understand.'

@@ -132,7 +132,8 @@ const TaskReports = () => {
   }
   const [search, setSearch] = useState('')
   const [nav, setNav] = useState(false)
-  const filteredData = data?.filter((item) => item['cleaner']?.includes(search))
+  const filteredData = data?.filter((item) => item['cleaner'].toLowerCase()?.includes(search.toLowerCase()))
+  console.log(filteredData)
   return (
     <>
       <Head>
@@ -165,6 +166,9 @@ const TaskReports = () => {
                 type="text"
                 placeholder="Search here"
               />
+              <select>
+                <option></option>
+              </select>
             </div>
             <div className="flex items-center justify-between gap-4">
               <p className="text-2xl font-semibold">Task Reports</p>

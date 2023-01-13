@@ -28,7 +28,7 @@ const ConfirmReceiptModal = ({ total, channel, reference, name }) => {
             check it again once you are already in our hotel
             <br />
             Your 50% balance should be paid upon checking-in in our hotel.
-            Please coordinate with our Hotel Receptionist to confirm ypur
+            Please coordinate with our Hotel Receptionist to confirm your
             identity and reservation.
             <br />
             Thank you and enjoy your stay!

@@ -37,6 +37,38 @@ const CleanerReports = () => {
       key: 'roomStatus',
     },
   ]
+  function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+  
+  const roomStatusChoices = data?.map(value => value.roomStatus).filter(onlyUnique); 
+  const reservationStatusChoices = data?.map(value => value.reservationStatus).filter(onlyUnique); 
+  const cleanerChoices = data?.map(value => value.cleaner).filter(onlyUnique); 
+  
+  const [cleaner, setCleaner] = useState("")
+  const [reservationStatus, setReservationStatus] = useState("")
+  const [roomStatus, setRoomStatus] = useState("")
+
+  const filteredButtons = [
+    {
+        key:"cleaner",
+        setter:setCleaner,
+        getter:cleaner,
+        choices:cleanerChoices
+    },
+    {
+        key:"reservationStatus",
+        setter:setReservationStatus,
+        getter:reservationStatus,
+        choices:reservationStatusChoices
+    },
+    {
+        key:"roomStatus",
+        setter:setRoomStatus,
+        getter:roomStatus,
+        choices:roomStatusChoices
+    }
+  ]
   return (
     <>
       <Head>
@@ -46,10 +78,11 @@ const CleanerReports = () => {
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js" />
 
       <AdminMain
-        searchKey="reservationStatus"
+        searchKey="_id"
         title="Cleaner Reports"
         data_headers={data_headers}
         data_items={data}
+        filteredButtons={filteredButtons}
       />
     </>
   )

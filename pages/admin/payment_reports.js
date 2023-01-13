@@ -41,26 +41,41 @@ const Payment = () => {
     {
       name: 'Amount',
       key: 'total',
-    },
-    {
-      name: 'Date',
-      key: 'created_at',
-    },
+    }, 
+      {
+        name: 'Date',
+        key: 'created_at',
+      },
   ]
-
+  function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+  
+  const roomTypeChoices = data?.map(value => value.roomType).filter(onlyUnique); 
+  console.log(roomTypeChoices)
+  const [roomType, setRoomType] = useState("")
+  const filteredButtons = [
+    {
+        key:"roomType",
+        setter:setRoomType,
+        getter:roomType,
+        choices:roomTypeChoices
+    }
+  ]
   return (
     <>
       <Head>
         <title>Payment Reports | Crowné Plaza</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <Script src="../../services/fileSaver.js" /> */}
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js" />
       <AdminMain
         searchKey="_id"
         title="Payment Reports"
         data_headers={data_headers}
         data_items={data}
+        filteredButtons={filteredButtons}
+
       />
     </>
   )

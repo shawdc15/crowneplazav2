@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Head from 'next/head'
 import { AdminMain } from '../../components'
 import { reservationReports } from '../../services/reservation.services'
@@ -10,6 +10,7 @@ const ReservationReports = () => {
     const res = await reservationReports()
     if (res.success) {
       setData(res?.data)
+      console.log(res?.data)
     }
   }, [])
   const data_headers = [
@@ -50,6 +51,7 @@ const ReservationReports = () => {
     //   key: 'voucherCode',
     // },
   ]
+  const [statusState,setStatusState] = useState("")
   return (
     <>
       <Head>
@@ -59,10 +61,11 @@ const ReservationReports = () => {
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js" />
 
       <AdminMain
-        searchKey="_id"
+        searchKey="name"
         title="Reservation Reports"
         data_headers={data_headers}
         data_items={data}
+        filteredButtons={[{key:"status",setter:setStatusState,getter:statusState,choices:['approved', 'checkedIn', 'checkedOut', 'reserved']}]}
       />
     </>
   )

@@ -9,6 +9,7 @@ import {
   addCalendarData,
 } from '../../services/calendar.services'
 import { addLogs } from '../../services/logreport.services'
+import { useAppContext } from '../../context/AppContext'
 const RoomRecord = ({ role }) => {
   const router = useRouter()
   let id = router.query.id
@@ -16,9 +17,10 @@ const RoomRecord = ({ role }) => {
   const mounted = useRef()
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState(null)
-
+  const {state,dispatch} = useAppContext()
   useEffect(() => {
     const load = async () => {
+      // console.log()
       if (id) {
         const newData = {
           roomNo: id.split('-')[1],
@@ -109,9 +111,9 @@ const RoomRecord = ({ role }) => {
     newData['roomStatus'] = temp['roomStatus']
     newData['reservationStatus'] = temp['reservationStatus']
     if (role == 'manager') {
-      newData['verifiedBy'] = 'Manager'
+      newData['verifiedBy'] = localStorage.getItem("name")+ ' - Manager'
     } else {
-      newData['verifiedBy'] = 'Housekeeping Supervisor'
+      newData['verifiedBy'] = localStorage.getItem("name")+ ' - Housekeeping Supervisor'
     }
     console.log(newData)
     const url = {
@@ -319,5 +321,4 @@ const RoomRecord = ({ role }) => {
     </>
   )
 }
-
 export default RoomRecord

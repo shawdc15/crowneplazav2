@@ -35,6 +35,7 @@ export default async (req, res) => {
           success: false,
           errors: {
             emailError: error.code === 11000 && 'Email already exist!',
+            other:error
           },
         })
       }

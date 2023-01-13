@@ -30,6 +30,7 @@ export default async (req, res) => {
     try {
       const user = await Staff.findOne({
         email,
+        statusofemployment: {$in: ["working","leave"]},
         status: true,
       })
       const decryptPassword = await bcrypt.compare(password, user.password)

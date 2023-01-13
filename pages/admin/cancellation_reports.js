@@ -51,6 +51,29 @@ const Cancellation = () => {
       key: 'created_at',
     },
   ]
+  function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+  const reasonChoices = data?.map(value => value.reason).filter(onlyUnique); 
+
+  const roomTypeChoices = data?.map(value => value.roomType).filter(onlyUnique); 
+  const [reason,setReason] = useState("")
+  const [roomType,setRoomType] = useState("")
+
+  const filteredButtons = [
+    {
+        key:"reason",
+        setter:setReason,
+        getter:reason,
+        choices:reasonChoices
+    },
+    {
+      key:"roomType",
+      setter:setRoomType,
+      getter:roomType,
+      choices:roomTypeChoices
+    }
+  ]
   return (
     <>
       <Head>
@@ -64,6 +87,7 @@ const Cancellation = () => {
         title="Cancellation Reports"
         data_headers={data_headers}
         data_items={data}
+        filteredButtons={filteredButtons}
       />
     </>
   )
