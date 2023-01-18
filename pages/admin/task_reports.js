@@ -15,7 +15,29 @@ const TaskReports = () => {
       setData(res.data)
     }
   }, [])
-  console.log(data)
+  function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+  const cleanerChoices = data?.map(value => value.cleaner).filter(onlyUnique); 
+  const roomnoChoices = data?.map(value => value.roomNo).filter(onlyUnique); 
+
+  const [cleaners,setCleaners] = useState("")
+  const [roomno,setRoomno] = useState("")
+
+  const filteredButtons = [
+    {
+        key:"cleaner",
+        setter:setCleaners,
+        getter:cleaners,
+        choices:cleanerChoices
+    },
+    {
+      key:"roomno",
+      setter:setRoomno,
+      getter:roomno,
+      choices:roomnoChoices
+  }
+  ]
   const noStatus = ['_id', 'date', 'cleaner', 'roomNo', 'verifiedBy']
   const data_headers = [
     {
@@ -132,8 +154,13 @@ const TaskReports = () => {
   }
   const [search, setSearch] = useState('')
   const [nav, setNav] = useState(false)
-  const filteredData = data?.filter((item) => item['cleaner'].toLowerCase()?.includes(search.toLowerCase()))
-  console.log(filteredData)
+  const filteredData = ()=>{
+    return data?.filter((item) =>
+      item["cleaner"].includes(filteredButtons[0].getter) && item["roomNo"].includes(filteredButtons[1].getter) && item["cleaner"]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
+    )
+  }
+
+  console.log(filteredData())
   return (
     <>
       <Head>
@@ -166,9 +193,21 @@ const TaskReports = () => {
                 type="text"
                 placeholder="Search here"
               />
-              <select>
-                <option></option>
-              </select>
+              {filteredButtons && (
+              <div className='flex gap-4'>
+                {filteredButtons?.map(({setter,choices,key},index)=>(
+                  <div key={index} className="flex flex-col">
+                    <label className='text-sm font-semibold'>{key.toUpperCase()}</label>
+                    <select  className="my-2 w-full rounded-md border border-slate-300 px-3 py-2" onChange={(e)=>setter(e.target.value)}>
+                      <option value="">All</option>
+                    {choices?.map((item,innerIndex)=>(
+                      <option className='capitalize' value={item} key={innerIndex}>{item}</option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
+              </div>
+              )}
             </div>
             <div className="flex items-center justify-between gap-4">
               <p className="text-2xl font-semibold">Task Reports</p>
@@ -192,8 +231,8 @@ const TaskReports = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredData &&
-                filteredData.map((item, index) => (
+              {filteredData() &&
+                filteredData()?.map((item, index) => (
                   <tr key={index}>
                     {data_headers &&
                       data_headers.map(({ key }, sub_index) => (
@@ -212,7 +251,7 @@ const TaskReports = () => {
                       ))}
                   </tr>
                 ))}
-              {filteredData?.length == 0 && (
+              {filteredData()?.length == 0 && (
                 <tr>
                   <td
                     colSpan={data_headers.length + 1}

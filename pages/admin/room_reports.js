@@ -38,6 +38,33 @@ const RoomReports = () => {
       key: 'reservationStatus',
     },
   ]
+  function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+  
+  const roomTypeChoices = data?.map(value => value.roomType).filter(onlyUnique); 
+  const reservationStatusChoices = data?.map(value => value.reservationStatus).filter(onlyUnique); 
+  const roomStatusChoices = data?.map(value => value.roomStatus).filter(onlyUnique); 
+  console.log(roomTypeChoices,reservationStatusChoices,roomStatusChoices)
+  const [roomType, setRoomType] = useState("")
+  const [reservationStatus, setReservationStatus] = useState("")
+  const [roomStatus, setRoomStatus] = useState("")
+
+  const filteredButtons = [
+    {
+        key:"roomType",
+        setter:setRoomType,
+        getter:roomType,
+        choices:roomTypeChoices
+    },
+    {
+        key:"roomStatus",
+        setter:setRoomStatus,
+        getter:roomStatus,
+        choices:roomStatusChoices
+    },
+  ]
+  console.log(data)
   return (
     <>
       <Head>
@@ -47,10 +74,11 @@ const RoomReports = () => {
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js" />
 
       <AdminMain
-        searchKey="reservationStatus"
+        searchKey="preferredRoom"
         title="Room Reports"
         data_headers={data_headers}
         data_items={data}
+        filteredButtons={filteredButtons}
       />
     </>
   )

@@ -50,22 +50,27 @@ const AdminTable = ({
   const filteredData = ()=>{
     if(title=="Reservation Reports"){
       return data_items?.filter((item) =>
-       item["status"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
+       item["status"].includes(filteredButtons[0].getter) && item[searchKey]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
       )
     }
     else if(title == "Payment Reports"){
       return data_items?.filter((item) =>
-      item["roomType"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
+      item["roomType"].includes(filteredButtons[0].getter) && item[searchKey]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
      )
     }
     else if(title == "Cancellation Reports"){
       return data_items?.filter((item) =>
-      item["roomType"]==filteredButtons[1].getter && item["reason"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
+      item["roomType"].includes(filteredButtons[1].getter) && item["reason"].includes(filteredButtons[0].getter) && item[searchKey]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
      )
     }
     else if(title == "Cleaner Reports"){
       return data_items?.filter((item) =>
-      item["roomStatus"]==filteredButtons[2].getter && item["reservationStatus"]==filteredButtons[1].getter && item["cleaner"]==filteredButtons[0].getter && item[searchKey]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
+      item["roomStatus"].includes(filteredButtons[2].getter) && item["reservationStatus"].includes(filteredButtons[1].getter) && item["cleaner"].includes(filteredButtons[0].getter) && item[searchKey]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
+     )
+    }
+    else if(title == "Room Reports"){
+      return data_items?.filter((item) =>
+      item["roomType"].includes(filteredButtons[0].getter) && item["roomStatus"].includes(filteredButtons[1].getter) && item[searchKey]?.toString()?.toLowerCase()?.includes(search?.toLowerCase())
      )
     }
     else{
@@ -226,7 +231,7 @@ const AdminTable = ({
             onChange={searchHandler}
             className="my-2 w-full rounded-md border border-slate-300 px-4 py-3"
             type="text"
-            placeholder={searchKey == "_id" ? "Search  ID No#" : "Search " + searchKey?.toLowerCase().replace("_"," ")}
+            placeholder={searchKey == "_id" ? "Search  ID No#" : searchKey == "preferredRoom" ? "Search Room No" : "Search " + searchKey?.toLowerCase().replace("_"," ")}
           />
         </div>
       {  filteredButtons && (
@@ -235,10 +240,10 @@ const AdminTable = ({
           {filteredButtons.map(({setter,choices,key},index)=>(
             <div key={index} className="flex flex-col">
               <label className='text-sm font-semibold'>{key.toUpperCase()}</label>
-            <select  className="my-2 w-full rounded-md border border-slate-300 px-3 py-2" onChange={(e)=>setter(e.target.value)}>
-              <option defaultValue>-----</option>
+            <select  className="capitalize my-2 w-full rounded-md border border-slate-300 px-3 py-2" onChange={(e)=>setter(e.target.value)}>
+              <option value="">All</option>
             {choices?.map((item,innerIndex)=>(
-              <option value={item} key={innerIndex}>{item}</option>
+              <option className='capitalize' value={item} key={innerIndex}>{item}</option>
               ))}
             </select>
               </div>
